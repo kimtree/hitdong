@@ -9,4 +9,4 @@ class Video(models.Model):
     created_at = models.DateTimeField()
 
     def __unicode__(self):
-        return self.video_id
+        return str(self.video_id)
