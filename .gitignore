@@ -60,3 +60,4 @@ venv
 db.sqlite3
 */migrations
 .DS_Store
+staticfiles
