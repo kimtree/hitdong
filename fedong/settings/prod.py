@@ -1,11 +1,8 @@
+import os
 from base import *
-import dj_database_url
-
 DEBUG = False
 
 # Database
-
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
@@ -19,3 +16,9 @@ DATABASES = {
 
     }
 }
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, 'static'),
+)
