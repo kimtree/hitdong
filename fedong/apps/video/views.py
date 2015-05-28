@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from django.http import HttpResponse
+from django.conf import settings
 from django.shortcuts import render
 from django.template import *
 
-from .models import Video
-from fedong.crawler import FedongCrawler
-from fbpage.models import FbPage
+from fedong.apps.video.models import Video
+from fedong.apps.crawler.crawler import VideoCrawler, PageCrawler
+from fedong.apps.fbpage.models import FbPage
 
 
 def main(request):
@@ -28,25 +28,33 @@ def main(request):
 
 
 def crawler(request):
-    page_names = ['moneydoni', 'saesora', 'gagdong']
 
-    for page_name in page_names:
-        c = FedongCrawler(page_name)
-        c.run()
+    # 페이지 크롤링 후 프로필 이미지 업데이트
+    pages = FbPage.objects.all()
+    for page in pages:
+        print page
+        p = PageCrawler(page.username, settings.FACEBOOK_ACCESS_TOKEN)
+        p.run()
 
-        result = FbPage.objects.filter(page_id=c.page.id)
-        if not result:
-            f = FbPage(page_id=c.page.id, name=c.page.name,
-                       icon_url=c.icon_url)
+        f = FbPage.objects.get(id=page.id)
+        if f:
+            f.page_id = p.page_id
+            f.name = p.name
+            f.profile_url = p.profile_url
             f.save()
-        else:
-            f = result[0]
 
-        for video in c.videos:
+    # 비디오 크롤링
+    pages = FbPage.objects.all()
+    for page in pages:
+        v = VideoCrawler(page.page_id, settings.FACEBOOK_ACCESS_TOKEN)
+        v.run()
+
+        for video in v.videos:
             result = Video.objects.filter(video_id=video.video_id)
             if not result:
-                v = Video(page=f, video_id=video.video_id,
+                v = Video(page=page, video_id=video.video_id,
                           description=video.description,
+                          thumbnail=video.thumbnail,
                           like_count=video.like_count,
                           comment_count=video.comment_count,
                           created_at=video.created_at)

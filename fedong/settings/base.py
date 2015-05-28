@@ -1,6 +1,6 @@
 import os
 
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = '(040-8tesy8tz&1nr1&0qk89y=e#qusra#q%oe4bclil--u%uk'
@@ -23,8 +23,8 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'video',
-    'fbpage'
+    'fedong.apps.video',
+    'fedong.apps.fbpage'
 )
 
 MIDDLEWARE_CLASSES = (
@@ -43,7 +43,7 @@ ROOT_URLCONF = 'fedong.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR + '/templates/'],
+        'DIRS': ['fedong/templates/'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -66,13 +66,11 @@ LANGUAGE_CODE = 'ko-kr'
 TIME_ZONE = 'Asia/Seoul'
 
 USE_I18N = True
-
 USE_L10N = True
-
 USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
-STATIC_ROOT = 'staticfiles'
+STATIC_ROOT = '/tmp/staticfiles'
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = (
@@ -81,3 +79,8 @@ STATICFILES_DIRS = (
 
 # SDK Keys
 KAKAO_API_KEY = '439be186d57f00290356da15542c8909'
+
+FACEBOOK_APP_ID = '936263079727671'
+FACEBOOK_APP_SECRET = 'f13c37430e5f2737c7f9362c956b9e34'
+
+FACEBOOK_ACCESS_TOKEN = '936263079727671|RtctC1LG2JGWD3JXmrEcy49qlTI'

@@ -1,4 +1,4 @@
 from django.contrib import admin
-from video.models import Video
+from fedong.apps.video.models import Video
 
 admin.site.register(Video)

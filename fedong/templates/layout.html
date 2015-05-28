@@ -3,13 +3,11 @@
 <html lang="ko">
 <head>
   <title>페동</title>
-  <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
-  <!-- Latest compiled and minified CSS -->
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
-  <!-- Latest compiled and minified JavaScript -->
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
   <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 </head>
 <body>
 <div id="fb-root"></div>
@@ -36,22 +34,32 @@ fjs.parentNode.insertBefore(js, fjs);
 <script>
   Kakao.init('{{ KAKAO_API_KEY }}');
 
-  Kakao.Link.createTalkLinkButton({
-    container: '#kakao-link-btn',
-    label: '카카오링크 샘플에 오신 것을 환영합니다.',
+  $('.kakao-link-btn').click(function(e){
+      e.preventDefault();
+
+      var img_src = $(this).data('thumbnail');
+      var id = $(this).data('url');
+
+      sendToKakaoTalk(img_src, 'http://fedong.kimtree.net/v/' + id);
+  });
+
+  function sendToKakaoTalk(img_src, url) {
+    Kakao.Link.sendTalkLink({
+    label: '아래 동영상을 확인하세요',
     image: {
-      src: 'http://dn.api1.kage.kakao.co.kr/14/dn/btqaWmFftyx/tBbQPH764Maw2R6IBhXd6K/o.jpg',
+      src: img_src,
       width: '300',
       height: '200'
     },
     webButton: {
-      text: '카카오 디벨로퍼스',
-      url: 'https://enigmatic-anchorage-2192.herokuapp.com/'
+      text: 'Checkout Fedong!',
+      url: url
     },
     fail: function() {
       alert('카카오톡이 설치되어 있지 않습니다.');
     }
   });
+  }
 </script>
 </body>
-</script>
+</html>
