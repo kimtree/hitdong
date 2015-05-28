@@ -25,3 +25,4 @@ print UPPER_DIR
 print UPPER_DIR2
 
 STATICFILES_DIRS = (UPPER_DIR2 + '/static',)
+STATIC_ROOT = '/app/staticfiles'
