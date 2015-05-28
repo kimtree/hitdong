@@ -5,7 +5,7 @@
   {% for video in videos %}
     <div class="col-md-12">
       <h4><img src="{{ video.page.icon_url }}">{{ video.page.name }}</h4>
-      <div style="width:500px;height:281px;background-image: url('http://dummyimage.com/500X281/000/fff.png');">
+      <div style="width:100%;max-width:500px;height:150px;max-height:280px;background-image: url('http://dummyimage.com/500X281/000/fff.png');">
         <div class="fb-video" data-href="https://www.facebook.com/{{ video.page.page_id }}/videos/{{ video.video_id }}/" data-allowfullscreen="true" data-width="500"></div>
       </div>
       <div class="caption">
