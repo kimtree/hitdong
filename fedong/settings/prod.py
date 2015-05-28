@@ -20,6 +20,4 @@ DATABASES = {
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 UPPER_DIR = os.path.abspath(os.path.join(BASE_DIR, os.pardir))
 
-STATICFILES_DIRS = (
-    os.path.join(UPPER_DIR, 'static'),
-)
+STATICFILES_DIRS = ()
