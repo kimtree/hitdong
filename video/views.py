@@ -10,11 +10,10 @@ from fbpage.models import FbPage
 
 
 def main(request):
-    #video_list = Video.objects.all().order_by('-like_count', '-comment_count')
     video_list = Video.objects.extra(select={'score': 'like_count + comment_count'}).all()
     video_list = video_list.extra(order_by=['-score'])
 
-    paginator = Paginator(video_list, 20)
+    paginator = Paginator(video_list, 5)
 
     page = request.GET.get('page')
     try:

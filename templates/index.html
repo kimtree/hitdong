@@ -5,19 +5,42 @@
   {% for video in videos %}
     <div class="col-md-12">
       <h4><img src="{{ video.page.icon_url }}">{{ video.page.name }}</h4>
-      <div class="fb-video" data-href="https://www.facebook.com/{{ video.page.page_id }}/videos/{{ video.video_id }}/" data-allowfullscreen="true" data-width="500"></div>
+      <div style="width:500px;height:281px;background-image: url('http://dummyimage.com/500X281/000/fff.png');">
+        <div class="fb-video" data-href="https://www.facebook.com/{{ video.page.page_id }}/videos/{{ video.video_id }}/" data-allowfullscreen="true" data-width="500"></div>
+      </div>
       <div class="caption">
         <p><small>{{ video.created_at }}</small>
-        <p>{{ video.description }}</p>
+        <p>{{ video.description|linebreaksbr|urlize }}</p>
         <p>{{ video.comment_count }} / {{ video.like_count }}</p>
         <p>
-          <a href="#" class="btn btn-primary" role="button">share</a>
-          <a href="#" class="btn btn-primary" role="button">share</a>
-          <div class="fb-share-button" data-href="https://enigmatic-anchorage-2192.herokuapp.com" data-layout="icon"></div>
-          <a href="#" class="btn btn-primary" id="kakao-link-btn" role="button"><img src="{% static "img/kakao-logo.png" %}"></a>
+          <a href="https://www.facebook.com/sharer/sharer.php?u={{ request.base_url }}" target="_blank">
+            <img src="{% static "img/fb-logo.png" %}">
+          </a>
+          <a href="#" id="kakao-link-btn">
+            <img src="{% static "img/kakao-logo.png" %}">
+          </a>
+          <a href="#" id="kakao-story-btn">
+            <img src="{% static "img/kakaostory-logo.png" %}">
+          </a>
         </p>
       </div>
     </div>
   {% endfor %}
+  </div>
+
+  <div class="pagination">
+    <span class="step-links">
+        {% if videos.has_previous %}
+            <a href="?page={{ videos.previous_page_number }}">previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ videos.number }} of {{ videos.paginator.num_pages }}.
+        </span>
+
+        {% if videos.has_next %}
+            <a href="?page={{ videos.next_page_number }}">next</a>
+        {% endif %}
+    </span>
   </div>
 {% endblock %}
