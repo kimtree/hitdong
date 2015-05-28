@@ -52,6 +52,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'fedong.context_processors.global_settings'
             ],
         },
     },
@@ -77,3 +78,6 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static'),
 )
+
+# SDK Keys
+KAKAO_API_KEY = '439be186d57f00290356da15542c8909'

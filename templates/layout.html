@@ -1,0 +1,58 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <title>페동</title>
+    <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <meta charset="utf-8">
+</head>
+<body>
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+var js, fjs = d.getElementsByTagName(s)[0];
+if (d.getElementById(id)) return;
+js = d.createElement(s); js.id = id;
+js.src = "//connect.facebook.net/ko_KR/sdk.js#xfbml=1&version=v2.3";
+fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+<div class="container">
+  <nav class="navbar navbar-default">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <a class="navbar-brand" href="#">
+          <img alt="Brand" src="{% static "img/fb-logo.png" %}">
+        </a>
+      </div>
+    </div>
+  </nav>
+  {% block body %}{% endblock %}
+</div>
+
+<script src="https://developers.kakao.com/sdk/js/kakao.min.js"></script>
+<script>
+  Kakao.init('{{ KAKAO_API_KEY }}');
+
+  Kakao.Link.createTalkLinkButton({
+    container: '#kakao-link-btn',
+    label: '카카오링크 샘플에 오신 것을 환영합니다.',
+    image: {
+      src: 'http://dn.api1.kage.kakao.co.kr/14/dn/btqaWmFftyx/tBbQPH764Maw2R6IBhXd6K/o.jpg',
+      width: '300',
+      height: '200'
+    },
+    webButton: {
+      text: '카카오 디벨로퍼스',
+      url: 'https://enigmatic-anchorage-2192.herokuapp.com/'
+    },
+    fail: function() {
+      alert('카카오톡이 설치되어 있지 않습니다.');
+    }
+  });
+</script>
+</body>
+</script>
