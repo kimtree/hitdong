@@ -23,4 +23,4 @@ UPPER_DIR = os.path.abspath(os.path.join(BASE_DIR, os.pardir))
 print BASE_DIR
 print UPPER_DIR
 
-STATICFILES_DIRS = (UPPER_DIR + 'static',)
+STATICFILES_DIRS = (UPPER_DIR + '/static',)
