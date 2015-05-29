@@ -11,10 +11,10 @@
         <p>{{ video.description|linebreaksbr|urlize }}</p>
         <p>{{ video.comment_count }} / {{ video.like_count }}</p>
         <p>
-          <a href="https://www.facebook.com/sharer/sharer.php?u={{ request.get_host }}/v/{{ video.video_id }}" target="_blank">
+          <a href="https://www.facebook.com/sharer/sharer.php?u=http://{{ request.get_host }}/v/{{ video.video_id }}" target="_blank">
             <img src="{% static "img/fb-logo.png" %}">
           </a>
-          <a href="#" class="kakao-link-btn" data-thumbnail="{{ video.thumbnail }}" data-url="{{ request.get_host }}/v/{{ video.video_id }}">
+          <a href="#" class="kakao-link-btn" data-thumbnail="{{ video.thumbnail }}" data-url="http://{{ request.get_host }}/v/{{ video.video_id }}">
             <img src="{% static "img/kakao-logo.png" %}">
           </a>
           <a href="#" id="kakao-story-btn">
