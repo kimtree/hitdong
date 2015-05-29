@@ -38,14 +38,15 @@ fjs.parentNode.insertBefore(js, fjs);
       e.preventDefault();
 
       var img_src = $(this).data('thumbnail');
-      var id = $(this).data('url');
+      var id = $(this).data('video-id');
+      var msg = $(this).data('msg');
 
-      sendToKakaoTalk(img_src, 'http://fedong.kimtree.net/v/' + id);
+      sendToKakaoTalk(img_src, 'http://fedong.kimtree.net/v/' + id, msg);
   });
 
-  function sendToKakaoTalk(img_src, url) {
+  function sendToKakaoTalk(img_src, url, msg) {
     Kakao.Link.sendTalkLink({
-    label: '아래 동영상을 확인하세요',
+    label: msg,
     image: {
       src: img_src,
       width: '300',

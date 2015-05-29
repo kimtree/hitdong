@@ -8,12 +8,24 @@ from fedong.apps.crawler.crawler import VideoCrawler, PageCrawler
 from fedong.apps.video.models import Video
 from fedong.apps.fbpage.models import FbPage
 
+import datetime
+
+import dateutil.tz
+
 
 def main(request):
     video_list = Video.objects.extra(select={'score': 'like_count + comment_count'}).all()
     video_list = video_list.extra(order_by=['-score'])
 
+    now = datetime.datetime.now(dateutil.tz.tzlocal())
+    yesterday = now - datetime.timedelta(days=1)
+
+    min_time = yesterday.replace(hour=0, minute=0, second=0, microsecond=0)
+    max_time = yesterday.replace(hour=23, minute=59, second=59, microsecond=0)
+    video_list = video_list.filter(created_at__range=(min_time, max_time))
+
     paginator = Paginator(video_list, 5)
+    total_count = paginator.count
 
     page = request.GET.get('page')
     try:
@@ -23,7 +35,8 @@ def main(request):
     except EmptyPage:
         videos = paginator.page(paginator.num_pages)
 
-    return render(request, 'index.html', {'videos': videos},
+    return render(request, 'index.html',
+                  {'videos': videos, 'total_count': total_count},
                   context_instance=RequestContext(request))
 
 

@@ -2,6 +2,9 @@
 {% load staticfiles %}
 {% block body %}
   <div class="row">
+    <div class="col-md-12">
+      <h4>{{ yesterday.year }}년 {{ yesterday.month }}월 {{ yesterday.day }}일 {{ total_count }}건</h4>
+    </div>
   {% for video in videos %}
     <div class="col-md-12">
       <h4><a href="/p/{{ video.page.username }}"><img src="{{ video.page.profile_url }}">{{ video.page.name }}</a></h4>
@@ -14,7 +17,7 @@
           <a href="https://www.facebook.com/sharer/sharer.php?u=http://{{ request.get_host }}/v/{{ video.video_id }}" target="_blank">
             <img src="{% static "img/fb-logo.png" %}">
           </a>
-          <a href="#" class="kakao-link-btn" data-thumbnail="{{ video.thumbnail }}" data-url="http://{{ request.get_host }}/v/{{ video.video_id }}">
+          <a href="#" class="kakao-link-btn" data-thumbnail="{{ video.thumbnail }}" data-video-id="{{ video.video_id }}" data-msg="{{ video.page.name }}의 동영상을 확인하세요!">
             <img src="{% static "img/kakao-logo.png" %}">
           </a>
           <a href="#" id="kakao-story-btn">
