@@ -39,7 +39,6 @@ class PageCrawler(object):
     def profile_url(self):
         return self._profile_url
 
-
     def run(self):
         profile = self.fb.get_object(self.source_name)
         profile_img = self.fb.get_connections(profile['id'], 'picture')

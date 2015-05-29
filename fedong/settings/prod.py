@@ -1,8 +1,6 @@
-import os
 from base import *
 DEBUG = False
 
-# Database
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
@@ -16,13 +14,3 @@ DATABASES = {
 
     }
 }
-
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-UPPER_DIR = os.path.abspath(os.path.join(BASE_DIR, os.pardir))
-UPPER_DIR2 = os.path.abspath(os.path.join(UPPER_DIR, os.pardir))
-print BASE_DIR
-print UPPER_DIR
-print UPPER_DIR2
-
-STATICFILES_DIRS = (UPPER_DIR2 + '/static',)
-STATIC_ROOT = '/app/staticfiles'
