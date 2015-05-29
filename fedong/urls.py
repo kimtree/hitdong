@@ -15,13 +15,16 @@ Including another URLconf
 """
 from django.conf.urls import include, url
 from django.contrib import admin
-from fedong.apps.video import views as video_views
+from fedong.apps.video import views as video
+from fedong.apps.fbpage import views as page
 from django.conf import settings
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^$', video_views.main),
-    url(r'^crawler/$', video_views.crawler),
+    url(r'^$', video.main),
+    url(r'^p/(?P<username>\w+)$', page.view),
+    url(r'^v/(?P<video_id>[0-9]+)$', video.view),
+    url(r'^crawler/$', video.crawler),
 ]
 
 urlpatterns += [url(r'^static/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.STATIC_ROOT})]

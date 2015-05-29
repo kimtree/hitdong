@@ -1,0 +1,27 @@
+{% extends "layout.html" %}
+{% load staticfiles %}
+{% block body %}
+	비디오 상세
+  <div class="row">
+    <div class="col-md-12">
+      <h4><img src="{{ video.page.profile_url }}">{{ video.page.name }}</h4>
+      <div class="fb-video" data-href="https://www.facebook.com/{{ video.page.page_id }}/videos/{{ video.video_id }}/" data-allowfullscreen="true" data-width="500"></div>
+      <div class="caption">
+        <p><small>{{ video.created_at }}</small>
+        <p>{{ video.description|linebreaksbr|urlize }}</p>
+        <p>{{ video.comment_count }} / {{ video.like_count }}</p>
+        <p>
+          <a href="https://www.facebook.com/sharer/sharer.php?u={{ request.base_url }}" target="_blank">
+            <img src="{% static "img/fb-logo.png" %}">
+          </a>
+          <a href="#" class="kakao-link-btn" data-thumbnail="{{ video.thumbnail }}" data-url="{{ video.video_id }}">
+            <img src="{% static "img/kakao-logo.png" %}">
+          </a>
+          <a href="#" id="kakao-story-btn">
+            <img src="{% static "img/kakaostory-logo.png" %}">
+          </a>
+        </p>
+      </div>
+    </div>
+  </div>
+{% endblock %}

@@ -4,17 +4,17 @@
   <div class="row">
   {% for video in videos %}
     <div class="col-md-12">
-      <h4><img src="{{ video.page.profile_url }}">{{ video.page.name }}</h4>
+      <h4><a href="/p/{{ video.page.username }}"><img src="{{ video.page.profile_url }}">{{ video.page.name }}</a></h4>
       <div class="fb-video" data-href="https://www.facebook.com/{{ video.page.page_id }}/videos/{{ video.video_id }}/" data-allowfullscreen="true" data-width="500"></div>
       <div class="caption">
         <p><small>{{ video.created_at }}</small>
         <p>{{ video.description|linebreaksbr|urlize }}</p>
         <p>{{ video.comment_count }} / {{ video.like_count }}</p>
         <p>
-          <a href="https://www.facebook.com/sharer/sharer.php?u={{ request.base_url }}" target="_blank">
+          <a href="https://www.facebook.com/sharer/sharer.php?u={{ request.get_host }}/v/{{ video.video_id }}" target="_blank">
             <img src="{% static "img/fb-logo.png" %}">
           </a>
-          <a href="#" class="kakao-link-btn" data-thumbnail="{{ video.thumbnail }}" data-url="{{ video.video_id }}">
+          <a href="#" class="kakao-link-btn" data-thumbnail="{{ video.thumbnail }}" data-url="{{ request.get_host }}/v/{{ video.video_id }}">
             <img src="{% static "img/kakao-logo.png" %}">
           </a>
           <a href="#" id="kakao-story-btn">
@@ -25,7 +25,6 @@
     </div>
   {% endfor %}
   </div>
-
   <nav>
     <ul class="pager">
     {% if videos.has_previous %}

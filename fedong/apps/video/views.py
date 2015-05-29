@@ -4,8 +4,8 @@ from django.conf import settings
 from django.shortcuts import render
 from django.template import *
 
-from fedong.apps.video.models import Video
 from fedong.apps.crawler.crawler import VideoCrawler, PageCrawler
+from fedong.apps.video.models import Video
 from fedong.apps.fbpage.models import FbPage
 
 
@@ -27,8 +27,14 @@ def main(request):
                   context_instance=RequestContext(request))
 
 
-def crawler(request):
+def view(request, video_id):
+    video = Video.objects.filter(video_id=video_id)[0]
 
+    return render(request, 'video.html', {'video': video},
+                  context_instance=RequestContext(request))
+
+
+def crawler(request):
     # 페이지 크롤링 후 프로필 이미지 업데이트
     pages = FbPage.objects.all()
     for page in pages:
