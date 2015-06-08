@@ -1,6 +1,7 @@
 import threading
 import Queue
 
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.conf import settings
 from django.shortcuts import render
 from django.template import *
@@ -11,11 +12,23 @@ from fedong.apps.video.models import Video
 
 
 def view(request, username):
-    page = FbPage.objects.filter(username=username)[0]
+    fbpage = FbPage.objects.filter(username=username)[0]
 
-    videos = Video.objects.filter(page=page)
+    videos = Video.objects.filter(page=fbpage).order_by('-id')
 
-    return render(request, 'page.html', {'page': page, 'videos': videos},
+    paginator = Paginator(videos, 5)
+    total_count = paginator.count
+
+    page = request.GET.get('page')
+    try:
+        videos = paginator.page(page)
+    except PageNotAnInteger:
+        videos = paginator.page(1)
+    except EmptyPage:
+        videos = paginator.page(paginator.num_pages)
+
+    return render(request, 'page.html',
+                  {'page': fbpage, 'videos': videos, 'total_count': total_count},
                   context_instance=RequestContext(request))
 
 

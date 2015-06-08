@@ -2,20 +2,31 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <title>페동</title>
+  <title>힛동 :: 오늘의 히트 동영상!</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+  <link rel="shortcut icon" type="image/png" href="{% static "img/favicon.ico" %}"/>
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="{% static "img/logo.png" %}">
+
+  <meta name="og:title" content="{% block title %}힛동{% endblock %}"/>
+  <meta name="og:url" content="{% block url %}http://hitdong.com{% endblock %}"/>
+  <meta name="og:description" content="{% block description %}오늘의 히트 동영상!{% endblock %}">
+  <meta name="og:image" content="{% block meta_thumbnail %}{% static "img/logo.png" %}{% endblock %}"/>
+
   <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+  {% block head %}
+  {% endblock %}
 </head>
 <body>
 <div class="container">
   <nav class="navbar navbar-default">
     <div class="container-fluid">
       <div class="navbar-header">
-        <a class="navbar-brand" href="#">
-          <img alt="Brand" src="{% static "img/fb-logo.png" %}">
+        <a class="navbar-brand" href="/">
+          <img alt="Brand" src="{% static "img/logo.png" %}" width="25">
         </a>
       </div>
     </div>
