@@ -8,7 +8,7 @@
   {% for video in videos %}
     <div class="col-md-12">
       <h4><a href="/p/{{ video.page.username }}"><img src="{{ video.page.profile_url }}">{{ video.page.name }}</a></h4>
-      <a href="/v/{{ video.video_id }}"><img src="{{ video.thumbnail }}"></a>
+      <a href="/v/{{ video.video_id }}"><img src="{{ video.thumbnail }}" width="500"></a>
       <div class="caption">
         <p><small>{{ video.created_at }}</small>
         <p>{{ video.description|linebreaksbr|urlize }}</p>
