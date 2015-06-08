@@ -21,6 +21,7 @@ class PageCrawler(object):
         self._page_id = None
         self._username = None
         self._name = None
+        self._likes = None
         self._profile_url = None
 
     @property
@@ -36,6 +37,10 @@ class PageCrawler(object):
         return self._name
 
     @property
+    def likes(self):
+        return self._likes
+
+    @property
     def profile_url(self):
         return self._profile_url
 
@@ -46,6 +51,7 @@ class PageCrawler(object):
         self._page_id = profile['id']
         self._username = profile['username']
         self._name = profile['name']
+        self._likes = profile['likes']
         self._profile_url = profile_img['url']
 
 

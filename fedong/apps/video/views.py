@@ -1,10 +1,13 @@
 # -*- coding: utf-8 -*-
+import threading
+import Queue
+
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.conf import settings
 from django.shortcuts import render
 from django.template import *
 
-from fedong.apps.crawler.crawler import VideoCrawler, PageCrawler
+from fedong.apps.crawler.crawler import VideoCrawler
 from fedong.apps.video.models import Video
 from fedong.apps.fbpage.models import FbPage
 
@@ -48,33 +51,43 @@ def view(request, video_id):
 
 
 def crawler(request):
-    # 페이지 크롤링 후 프로필 이미지 업데이트
-    pages = FbPage.objects.all()
-    for page in pages:
-        print page
-        p = PageCrawler(page.username, settings.FACEBOOK_ACCESS_TOKEN)
-        p.run()
-
-        f = FbPage.objects.get(id=page.id)
-        if f:
-            f.page_id = p.page_id
-            f.name = p.name
-            f.profile_url = p.profile_url
-            f.save()
-
     # 비디오 크롤링
     pages = FbPage.objects.all()
-    for page in pages:
-        v = VideoCrawler(page.page_id, settings.FACEBOOK_ACCESS_TOKEN)
-        v.run()
 
-        for video in v.videos:
-            result = Video.objects.filter(video_id=video.video_id)
-            if not result:
-                v = Video(page=page, video_id=video.video_id,
-                          description=video.description,
-                          thumbnail=video.thumbnail,
-                          like_count=video.like_count,
-                          comment_count=video.comment_count,
-                          created_at=video.created_at)
-                v.save()
+    data_queue = Queue.Queue()
+    for page in pages:
+        data_queue.put((page.page_id, settings.FACEBOOK_ACCESS_TOKEN))
+
+    # Run Crawler
+    for i in range(8):
+        t = VideoThread(data_queue)
+        t.setDaemon(True)
+        t.start()
+
+    data_queue.join()
+
+
+class VideoThread(threading.Thread):
+    def __init__(self, data_queue):
+        threading.Thread.__init__(self)
+        self.data_queue = data_queue
+
+    def run(self):
+        while True:
+            page_id, access_token = self.data_queue.get()
+
+            v = VideoCrawler(page_id, access_token)
+            v.run()
+
+            for video in v.videos:
+                result = Video.objects.filter(video_id=video.video_id)
+                if not result:
+                    v = Video(page=page, video_id=video.video_id,
+                              description=video.description,
+                              thumbnail=video.thumbnail,
+                              like_count=video.like_count,
+                              comment_count=video.comment_count,
+                              created_at=video.created_at)
+                    v.save()
+
+            self.data_queue.task_done()

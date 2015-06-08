@@ -24,7 +24,8 @@ urlpatterns = [
     url(r'^$', video.main),
     url(r'^p/(?P<username>\w+)$', page.view),
     url(r'^v/(?P<video_id>[0-9]+)$', video.view),
-    url(r'^crawler/$', video.crawler),
+    url(r'^crawler/page$', page.crawler),
+    url(r'^crawler/video$', video.crawler),
 ]
 
 urlpatterns += [url(r'^static/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.STATIC_ROOT})]
