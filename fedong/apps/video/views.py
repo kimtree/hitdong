@@ -56,7 +56,7 @@ def crawler(request):
 
     data_queue = Queue.Queue()
     for page in pages:
-        data_queue.put((page.page_id, settings.FACEBOOK_ACCESS_TOKEN))
+        data_queue.put((page, settings.FACEBOOK_ACCESS_TOKEN))
 
     # Run Crawler
     for i in range(8):
@@ -74,9 +74,9 @@ class VideoThread(threading.Thread):
 
     def run(self):
         while True:
-            page_id, access_token = self.data_queue.get()
+            page, access_token = self.data_queue.get()
 
-            v = VideoCrawler(page_id, access_token)
+            v = VideoCrawler(page.page_id, access_token)
             v.run()
 
             for video in v.videos:
