@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.conf import settings
-from fedong.functions import get_yesterday
+from hitdong.functions import get_yesterday
 
 
 def global_settings(request):

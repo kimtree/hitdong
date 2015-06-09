@@ -8,9 +8,9 @@ from django.shortcuts import render
 from django.template import *
 from django.http import HttpResponse
 
-from fedong.apps.crawler.crawler import PageCrawler
-from fedong.apps.fbpage.models import FbPage
-from fedong.apps.video.models import Video
+from hitdong.apps.crawler.crawler import PageCrawler
+from hitdong.apps.fbpage.models import FbPage
+from hitdong.apps.video.models import Video
 
 
 def view(request, username):

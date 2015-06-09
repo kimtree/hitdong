@@ -1,5 +1,5 @@
 from django.db import models
-from fedong.apps.fbpage.models import FbPage
+from hitdong.apps.fbpage.models import FbPage
 
 
 class Video(models.Model):

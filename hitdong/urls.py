@@ -15,8 +15,8 @@ Including another URLconf
 """
 from django.conf.urls import include, url
 from django.contrib import admin
-from fedong.apps.video import views as video
-from fedong.apps.fbpage import views as page
+from hitdong.apps.video import views as video
+from hitdong.apps.fbpage import views as page
 from django.conf import settings
 
 urlpatterns = [

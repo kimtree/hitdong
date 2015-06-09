@@ -23,8 +23,8 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'fedong.apps.video',
-    'fedong.apps.fbpage'
+    'hitdong.apps.video',
+    'hitdong.apps.fbpage'
 )
 
 MIDDLEWARE_CLASSES = (
@@ -38,12 +38,12 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.security.SecurityMiddleware',
 )
 
-ROOT_URLCONF = 'fedong.urls'
+ROOT_URLCONF = 'hitdong.urls'
 
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': ['fedong/templates/'],
+        'DIRS': ['hitdong/templates/'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -52,13 +52,13 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'fedong.context_processors.global_settings'
+                'hitdong.context_processors.global_settings'
             ],
         },
     },
 ]
 
-WSGI_APPLICATION = 'fedong.wsgi.application'
+WSGI_APPLICATION = 'hitdong.wsgi.application'
 
 # Localization
 LANGUAGE_CODE = 'ko-kr'
