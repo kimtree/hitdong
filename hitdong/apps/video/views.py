@@ -76,7 +76,11 @@ def crawler(request):
         print video.video_id
         result = Video.objects.filter(video_id=video.video_id)
         if not result:
-            page = FbPage.objects.get(id=video.page_id)
+            page = FbPage.objects.filter(page_id=video.page_id)
+            if page:
+                page = page[0]
+            else:
+                continue
             v = Video(page=page, video_id=video.video_id,
                       description=video.description,
                       thumbnail=video.thumbnail,
