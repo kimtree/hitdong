@@ -6,7 +6,7 @@ import dateutil.tz
 import facebook
 import requests
 
-Video = collections.namedtuple('Video', 'video_id, description, thumbnail, like_count, comment_count, created_at')
+Video = collections.namedtuple('Video', 'page_id, video_id, description, thumbnail, like_count, comment_count, created_at')
 
 
 class PageCrawler(object):
@@ -91,7 +91,7 @@ class VideoCrawler(object):
                         likes = self.fb.get_connections(post['id'], 'likes', summary=True)
                         like_count = likes['summary']['total_count']
 
-                        v = Video(post['id'], post['description'], thumbnail, like_count, comment_count, created_at)
+                        v = Video(self.page_id, post['id'], post['description'], thumbnail, like_count, comment_count, created_at)
                         self._videos.append(v)
                     elif created_at < yesterday:
                         ended = True

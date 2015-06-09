@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import time
 import threading
 import Queue
 
@@ -6,6 +7,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.conf import settings
 from django.shortcuts import render
 from django.template import *
+from django.http import HttpResponse
 
 from fedong.apps.crawler.crawler import VideoCrawler
 from fedong.apps.video.models import Video
@@ -55,22 +57,42 @@ def crawler(request):
     pages = FbPage.objects.all()
 
     data_queue = Queue.Queue()
+    output_queue = Queue.Queue()
     for page in pages:
         data_queue.put((page, settings.FACEBOOK_ACCESS_TOKEN))
 
+    start_time = time.time()
+
     # Run Crawler
-    for i in range(8):
-        t = VideoThread(data_queue)
+    for i in range(20):
+        t = VideoThread(data_queue, output_queue)
         t.setDaemon(True)
         t.start()
 
     data_queue.join()
 
+    while not output_queue.empty():
+        video = output_queue.get()
+        print video.video_id
+        result = Video.objects.filter(video_id=video.video_id)
+        if not result:
+            page = FbPage.objects.get(id=video.page_id)
+            v = Video(page=page, video_id=video.video_id,
+                      description=video.description,
+                      thumbnail=video.thumbnail,
+                      like_count=video.like_count,
+                      comment_count=video.comment_count,
+                      created_at=video.created_at)
+            v.save()
+
+    return HttpResponse('%s seconds' % (time.time() - start_time))
+
 
 class VideoThread(threading.Thread):
-    def __init__(self, data_queue):
+    def __init__(self, data_queue, output_queue):
         threading.Thread.__init__(self)
         self.data_queue = data_queue
+        self.output_queue = output_queue
 
     def run(self):
         while True:
@@ -80,14 +102,6 @@ class VideoThread(threading.Thread):
             v.run()
 
             for video in v.videos:
-                result = Video.objects.filter(video_id=video.video_id)
-                if not result:
-                    v = Video(page=page, video_id=video.video_id,
-                              description=video.description,
-                              thumbnail=video.thumbnail,
-                              like_count=video.like_count,
-                              comment_count=video.comment_count,
-                              created_at=video.created_at)
-                    v.save()
+                self.output_queue.put(video)
 
             self.data_queue.task_done()
