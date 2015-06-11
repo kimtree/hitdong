@@ -19,7 +19,7 @@ import dateutil.tz
 
 
 def main(request):
-    video_list = Video.objects.extra(select={'score': 'like_count + comment_count'}).all()
+    video_list = Video.objects.select_related().extra(select={'score': '(like_count + comment_count) / likes'}).all()
     video_list = video_list.extra(order_by=['-score'])
 
     now = datetime.datetime.now(dateutil.tz.tzlocal())
