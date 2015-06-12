@@ -19,15 +19,20 @@ import dateutil.tz
 
 
 def main(request):
-    video_list = Video.objects.select_related().extra(select={'score': '(like_count + comment_count) / likes'}).all()
-    video_list = video_list.extra(order_by=['-score'])
 
+    video_list = Video.objects.select_related()
+    video_list = video_list.extra(select={'score': '(like_count + comment_count) / likes',
+                                          'date': 'date(created_at)'})
+    video_list = video_list.extra(order_by=['-date', '-score'])
+
+    '''
     now = datetime.datetime.now(dateutil.tz.tzlocal())
     yesterday = now - datetime.timedelta(days=1)
 
     min_time = yesterday.replace(hour=0, minute=0, second=0, microsecond=0)
     max_time = yesterday.replace(hour=23, minute=59, second=59, microsecond=0)
     video_list = video_list.filter(created_at__range=(min_time, max_time))
+    '''
 
     paginator = Paginator(video_list, 5)
     total_count = paginator.count
