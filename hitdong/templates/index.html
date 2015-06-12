@@ -7,10 +7,11 @@
     {% include "video_macro.html" with use_profile=1 %}
   {% endfor %}
   </div>
+  <div id="banner_adlib"></div>
   <nav>
     <ul class="pager">
     {% if videos.has_previous %}
-      <li class="previous"><a href="#"><span aria-hidden="true">&larr;</span> Older</a></li>
+      <li class="previous"><a href="?page={{ videos.previous_page_number }}"><span aria-hidden="true">&larr;</span> Older</a></li>
     {% else %}
       <li class="previous disabled"><a href="#"><span aria-hidden="true">&larr;</span> Older</a></li>
     {% endif %}
