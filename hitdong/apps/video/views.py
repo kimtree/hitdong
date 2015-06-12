@@ -40,6 +40,9 @@ def main(request):
     except EmptyPage:
         videos = paginator.page(paginator.num_pages)
 
+    for video in videos:
+        video.description = video.description.split('\n')[0]
+
     return render(request, 'index.html',
                   {'videos': videos, 'total_count': total_count},
                   context_instance=RequestContext(request))

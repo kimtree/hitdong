@@ -75,48 +75,64 @@
 <script>
   Kakao.init('{{ KAKAO_API_KEY }}');
 
-  $('.kakao-link-btn').click(function(e){
-      e.preventDefault();
-
-      var img_src = $(this).data('thumbnail');
-      var id = $(this).data('video-id');
-      var msg = $(this).data('msg');
-
-      sendToKakaoTalk(img_src, 'http://hitdong.com/v/' + id + '?utm_source=kakao&utm_medium=link&utm_campaign=share', msg);
-  });
+  var video_host = 'http://hitdong.com/v/';
 
   $('.facebook-btn').click(function(e){
       e.preventDefault();
+
       var video_id = $(this).data('video-id');
+
       shareFacebook(video_id);
+  });
+
+  $('.kakao-link-btn').click(function(e){
+      e.preventDefault();
+
+      var video_id = $(this).data('video-id');
+      var msg = $(this).data('msg');
+
+      sendToKakaoTalk(video_id, msg);
+  });
+
+  $('.kakao-story-btn').click(function(e){
+      e.preventDefault();
+
+      var video_id = $(this).data('video-id');
+
+      sendToKakaoStory(video_id);
   });
 
   function shareFacebook(video_id) {
     var fb_url = 'https://www.facebook.com/sharer/sharer.php?u=';
-    var host = 'http://hitdong.com/v/';
     var mkt_params = '?utm_source=facebook&utm_medium=link&utm_campaign=share';
 
-    var url = host + video_id + mkt_params;
+    var url = video_host + video_id + mkt_params;
     url = fb_url + encodeURIComponent(url);
     window.open(url);
   }
 
-  function sendToKakaoTalk(img_src, url, msg) {
+  function sendToKakaoTalk(video_id, msg) {
+    var mkt_params = '?utm_source=kakao&utm_medium=link&utm_campaign=share';
+
+    var url = video_host + video_id + mkt_params;
+
     Kakao.Link.sendTalkLink({
-    label: msg,
-    image: {
-      src: img_src,
-      width: '300',
-      height: '200'
-    },
-    webButton: {
-      text: '지금 보러가기',
+      label: msg + '\n' + url,
+      installTalk: false,
+      fail: function() {
+        alert('카카오톡이 설치되어 있지 않습니다.');
+      }
+    });
+  }
+
+  function sendToKakaoStory(video_id) {
+    var mkt_params = '?utm_source=kakaostory&utm_medium=link&utm_campaign=share';
+
+    var url = video_host + video_id + mkt_params;
+
+    Kakao.Story.share({
       url: url
-    },
-    fail: function() {
-      alert('카카오톡이 설치되어 있지 않습니다.');
-    }
-  });
+    });
   }
 </script>
 </body>

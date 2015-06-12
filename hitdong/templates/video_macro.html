@@ -1,0 +1,32 @@
+{% load staticfiles %}
+<div class="col-md-12">
+  <div class="thumbnail">
+    <a href="/v/{{ video.video_id }}"><img src="{{ video.thumbnail }}" width="500" height="300"></a>
+    <div class="caption">
+      {% if use_profile %}
+      <div class="media" style="padding-bottom:20px;">
+        <a href="/p/{{ video.page.username }}">
+          <div class="media-left">
+            <img class="media-object" src="{{ video.page.profile_url }}">
+          </div>
+          <div class="media-body">
+            <h4 class="media-heading">{{ video.page.name }}</h4>
+          </div>
+        </a>
+      </div>
+      {% endif %}
+      <p>{{ video.description|linebreaksbr|urlize }}</p>
+      <ul class="list-inline text-center">
+        <li>
+          <a href="#" class="facebook-btn" data-video-id="{{ video.video_id }}"><img src="{% static "img/fb-logo.png" %}"></a>
+        </li>
+        <li>
+          <a href="#" class="kakao-link-btn" data-video-id="{{ video.video_id }}" data-msg="{{ video.page.name }}의 동영상을 확인하세요!"><img src="{% static "img/kakao-logo.png" %}"></a>
+        </li>
+        <li>
+          <a href="#" id="kakao-story-btn" data-video-id="{{ video.video_id }}"><img src="{% static "img/kakaostory-logo.png" %}"></a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>

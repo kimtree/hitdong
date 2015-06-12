@@ -2,42 +2,9 @@
 {% load staticfiles %}
 {% block body %}
   <div id="banner_adlib"></div>
-  <div class="page-header" style="margin-top:0px;">
-    <h3>{{ yesterday.year }}년 {{ yesterday.month }}월 {{ yesterday.day }}일</h3>
-  </div>
   <div class="row">
   {% for video in videos %}
-    <div class="col-md-12">
-      <div class="media">
-        <a href="/p/{{ video.page.username }}">
-          <div class="media-left">
-            <img class="media-object" src="{{ video.page.profile_url }}">
-          </div>
-          <div class="media-body">
-            <h4 class="media-heading">&nbsp;</h4>
-            {{ video.page.name }}
-          </div>
-        </a>
-      </div>
-      <div class="thumbnail">
-        <a href="/v/{{ video.video_id }}"><img src="{{ video.thumbnail }}" width="500" height="300"></a>
-        <div class="caption">
-          <p>{{ video.description|linebreaksbr|urlize }}</p>
-          <p class="text-center" style="padding-top:20px;">댓글 {{ video.comment_count }} / 좋아요 {{ video.like_count }}</p>
-          <ul class="list-inline text-center">
-            <li>
-              <a href="#" class="facebook-btn" data-video-id="{{ video.video_id }}"><img src="{% static "img/fb-logo.png" %}"></a>
-            </li>
-            <li>
-              <a href="#" class="kakao-link-btn" data-thumbnail="{{ video.thumbnail }}" data-video-id="{{ video.video_id }}" data-msg="{{ video.page.name }}의 동영상을 확인하세요!"><img src="{% static "img/kakao-logo.png" %}"></a>
-            </li>
-            <li>
-              <a href="#" id="kakao-story-btn"><img src="{% static "img/kakaostory-logo.png" %}"></a>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </div>
+    {% include "video_macro.html" with use_profile=1 %}
   {% endfor %}
   </div>
   <nav>

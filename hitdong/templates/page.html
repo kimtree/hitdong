@@ -11,26 +11,7 @@
   </div>
   <div class="row">
     {% for video in videos %}
-      <div class="col-md-12">
-        <div class="thumbnail">
-          <a href="/v/{{ video.video_id }}"><img src="{{ video.thumbnail }}" width="500" height="300"></a>
-          <div class="caption">
-            <p>{{ video.description|linebreaksbr|urlize }}</p>
-            <p class="text-center" style="padding-top:20px;">댓글 {{ video.comment_count }} / 좋아요 {{ video.like_count }}</p>
-            <ul class="list-inline text-center">
-              <li>
-                <a href="#" class="facebook-btn" data-video-id="{{ video.video_id }}"><img src="{% static "img/fb-logo.png" %}"></a>
-              </li>
-              <li>
-                <a href="#" class="kakao-link-btn" data-thumbnail="{{ video.thumbnail }}" data-video-id="{{ video.video_id }}" data-msg="{{ video.page.name }}의 동영상을 확인하세요!"><img src="{% static "img/kakao-logo.png" %}"></a>
-              </li>
-              <li>
-                <a href="#" id="kakao-story-btn"><img src="{% static "img/kakaostory-logo.png" %}"></a>
-              </li>
-            </ul>
-          </div>
-      </div>
-    </div>
+      {% include "video_macro.html" with use_profile=0 %}
     {% endfor %}
   </div>
   <nav>
