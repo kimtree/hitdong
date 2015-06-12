@@ -56,7 +56,9 @@ def main(request):
 def view(request, video_id):
     video = Video.objects.filter(video_id=video_id)[0]
 
-    return render(request, 'video.html', {'video': video},
+    same_page_videos = Video.objects.filter(page=video.page).exclude(video_id=video.video_id).order_by('?').all()[:2]
+
+    return render(request, 'video.html', {'video': video, 'same_page_videos': same_page_videos},
                   context_instance=RequestContext(request))
 
 

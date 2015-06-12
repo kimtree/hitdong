@@ -36,4 +36,17 @@
   <div class="row">
     {% include "video_macro.html" with use_profile=0 %}
   </div>
+  <div class="row">
+  <h3>이 페이지의 다른 동영상</h3>
+  {% for video in same_page_videos %}
+    <div class="col-md-6">
+      <div class="thumbnail">
+        <a href="/v/{{ video.video_id }}"><img src="{{ video.thumbnail }}"></a>
+        <div class="caption">
+          <p>{{ video.description }}.</p>
+        </div>
+      </div>
+    </div>
+  {% endfor %}
+  </div>
 {% endblock %}
