@@ -14,3 +14,5 @@ DATABASES = {
 
     }
 }
+
+STATIC_ROOT = '/home/hitdong/staticfiles'
