@@ -46,7 +46,7 @@
         <div class="thumbnail">
           <a href="/v/{{ video.video_id }}"><img src="{{ video.thumbnail }}"></a>
           <div class="caption">
-            <p>{{ video.description }}.</p>
+            <p>{{ video.description|linebreaksbr|urlize }}</p>
           </div>
         </div>
       </div>
