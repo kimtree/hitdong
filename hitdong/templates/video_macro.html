@@ -1,7 +1,11 @@
 {% load staticfiles %}
 <div class="col-md-12">
   <div class="thumbnail">
-    <a href="/v/{{ video.video_id }}"><img src="{{ video.thumbnail }}" width="500" height="300"></a>
+    {% if use_video %}
+      <div class="fb-video" data-href="https://www.facebook.com/{{ video.page.page_id }}/videos/{{ video.video_id }}/" data-allowfullscreen="true" data-width="500"></div>
+    {% else %}
+      <a href="/v/{{ video.video_id }}"><img src="{{ video.thumbnail }}" width="500" height="300"></a>
+    {% endif %}
     <div class="caption">
       {% if use_profile %}
       <div class="media" style="padding-bottom:20px;">
