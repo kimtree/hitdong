@@ -57,7 +57,6 @@ def crawler(request):
 
         f = FbPage.objects.filter(username=p.username)[0]
         if f:
-            print p.page_id, p.name
             f.page_id = p.page_id
             f.name = p.name
             f.profile_url = p.profile_url
