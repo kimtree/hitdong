@@ -4,7 +4,7 @@
 {% block title %}힛동{% endblock %}
 {% block url %}http://hitdong.com/v/{{ video.video_id }}{% endblock %}
 {% block description %}{{ video.description }}{% endblock %}
-{% block meta_thumbnail %}{{ video.thumbnail }}{% endblock %}
+{% block meta_thumbnail %}{{ video.thumbnail|safe }}{% endblock %}
 
 {% block body %}
   <div id="banner_adlib"></div>
