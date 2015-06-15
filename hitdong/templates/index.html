@@ -2,7 +2,7 @@
 {% load staticfiles %}
 {% block body %}
   <div id="banner_adlib"></div>
-  <div class="row">
+  <div class="row" style="padding-top:10px;">
   {% for video in videos %}
     {% include "video_macro.html" with use_profile=1 %}
   {% endfor %}
