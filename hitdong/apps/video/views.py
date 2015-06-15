@@ -19,7 +19,6 @@ import dateutil.tz
 
 
 def main(request):
-
     video_list = Video.objects.select_related()
     video_list = video_list.extra(select={'score': '(like_count + comment_count) / likes',
                                           'date': 'date(created_at)'})
@@ -51,6 +50,11 @@ def main(request):
     return render(request, 'index.html',
                   {'videos': videos, 'total_count': total_count},
                   context_instance=RequestContext(request))
+
+
+def test(request):
+    from django.core.cache import cache
+    cache.clear()
 
 
 def view(request, video_id):
