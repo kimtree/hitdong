@@ -3,6 +3,7 @@ import time
 import threading
 import Queue
 
+from django.core.cache import cache
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.conf import settings
 from django.shortcuts import render
@@ -52,11 +53,6 @@ def main(request):
                   context_instance=RequestContext(request))
 
 
-def test(request):
-    from django.core.cache import cache
-    cache.clear()
-
-
 def view(request, video_id):
     video = Video.objects.filter(video_id=video_id)[0]
 
@@ -102,6 +98,8 @@ def crawler(request):
                       comment_count=video.comment_count,
                       created_at=video.created_at)
             v.save()
+
+    cache.clear()
 
     return HttpResponse('%s seconds' % (time.time() - start_time))
 

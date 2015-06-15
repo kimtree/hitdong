@@ -23,7 +23,7 @@ from hitdong.apps.fbpage import views as page
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^$', cache_page(60 * 24)(video.main)),
+    url(r'^$', cache_page(60 * 60 * 24)(video.main)),
     url(r'^p/(?P<username>\w+)$', page.view),
     url(r'^v/(?P<video_id>[0-9]+)$', video.view),
     url(r'^crawler/page$', page.crawler),
