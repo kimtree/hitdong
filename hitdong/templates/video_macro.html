@@ -2,7 +2,7 @@
 <div class="col-md-12">
   <div class="thumbnail">
     {% if use_video %}
-      <div class="loader" style="height:200px;padding-top:80px;text-align:center;">
+      <div class="loader" style="z-index:9999;height:200px;padding-top:80px;text-align:center;">
         페이스북 동영상을 불러오고 있습니다.
         <div class="progress">
           <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
@@ -13,7 +13,7 @@
       <div class="fb-video"
            data-href="https://www.facebook.com/video.php?v={{ video.video_id }}"
            data-allowfullscreen="true"
-           data-width="400" style="display:none;">
+           data-width="400">
       </div>
     {% else %}
       <a href="/v/{{ video.video_id }}"><img src="{{ video.thumbnail }}" width="500" height="300"></a>
@@ -52,8 +52,7 @@
     var state = $('.fb-video').attr('fb-xfbml-state');
     if (state == 'rendered') {
       $('.loader').remove();
-      $('.fb-video').show();
       clearInterval(fbVideoChecker);
     }
-  },1000);
+  },100);
 </script>
