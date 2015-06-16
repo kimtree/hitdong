@@ -51,7 +51,7 @@
   var fbVideoChecker = setInterval(function(){
     var state = $('.fb-video').attr('fb-xfbml-state');
     if (state == 'rendered') {
-      $('.loader').hide();
+      $('.loader').remove();
       $('.fb-video').show();
       clearInterval(fbVideoChecker);
     }
