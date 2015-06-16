@@ -18,7 +18,7 @@ def view(request, username):
 
     videos = Video.objects.filter(page=fbpage).order_by('-id')
 
-    paginator = Paginator(videos, 5)
+    paginator = Paginator(videos, 10)
     total_count = paginator.count
 
     page = request.GET.get('page')
