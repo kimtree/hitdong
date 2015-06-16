@@ -9,6 +9,7 @@
   <link rel="shortcut icon" type="image/png" href="{% static "img/favicon.ico" %}"/>
   <link rel="apple-touch-icon-precomposed" sizes="144x144" href="{% static "img/logo.png" %}">
 
+  <meta name="thumbnail" content="{% block meta_thumbnail %}{% static "img/logo.png" %}{% endblock %}" />
   <meta name="og:title" content="{% block title %}힛동{% endblock %}"/>
   <meta name="og:url" content="{% block url %}http://hitdong.com{% endblock %}"/>
   <meta name="og:description" content="{% block description %}오늘의 히트 동영상!{% endblock %}">
