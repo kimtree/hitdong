@@ -39,7 +39,7 @@
       {% for video in same_page_videos %}
         <div class="col-xs-6">
           <div class="thumbnail">
-            <a href="/v/{{ video.video_id }}" onClick="_gaq.push(['_trackEvent', 'Videos', 'Click', 'recommend:{{ video.video_id }}']);"><img src="{{ video.thumbnail }}"></a>
+            <a href="/v/{{ video.video_id }}" onClick="ga('send', 'event', 'video', 'recommend', '{{ video.video_id }}');"><img src="{{ video.thumbnail }}"></a>
             <div class="caption" style="word-break: break-all;">
               <p>{{ video.description|linebreaksbr|urlize }}</p>
             </div>
