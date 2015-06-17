@@ -31,19 +31,21 @@
     {% include "video_macro.html" with use_profile=0 use_video=1 %}
   </div>
   <div id="banner_adlib"></div>
-  <div class="row">
-    <div class="col-xs-12">
-      <h4>이 페이지의 다른 동영상</h4>
-    </div>
-    {% for video in same_page_videos %}
-      <div class="col-xs-6">
-        <div class="thumbnail">
-          <a href="/v/{{ video.video_id }}"><img src="{{ video.thumbnail }}"></a>
-          <div class="caption" style="word-break: break-all;">
-            <p>{{ video.description|linebreaksbr|urlize }}</p>
+  {% if same_page_videos|length > 0 %}
+    <div class="row">
+      <div class="col-xs-12">
+        <h4>이 페이지의 다른 동영상</h4>
+      </div>
+      {% for video in same_page_videos %}
+        <div class="col-xs-6">
+          <div class="thumbnail">
+            <a href="/v/{{ video.video_id }}" onClick="_gaq.push(['_trackEvent', 'Videos', 'Click', 'recommend:{{ video.video_id }}']);"><img src="{{ video.thumbnail }}"></a>
+            <div class="caption" style="word-break: break-all;">
+              <p>{{ video.description|linebreaksbr|urlize }}</p>
+            </div>
           </div>
         </div>
-      </div>
-    {% endfor %}
-  </div>
+      {% endfor %}
+    </div>
+  {% endif %}
 {% endblock %}
