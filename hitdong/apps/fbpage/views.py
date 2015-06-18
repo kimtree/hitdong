@@ -35,35 +35,40 @@ def view(request, username):
 
 
 def crawler(request):
-    pages = FbPage.objects.all()
+    key = request.GET.get('key', '')
 
-    data_queue = Queue.Queue()
-    output_queue = Queue.Queue()
-    for page in pages:
-        data_queue.put((page.username, settings.FACEBOOK_ACCESS_TOKEN))
+    if key == 'kimtree':
+        pages = FbPage.objects.all()
 
-    start_time = time.time()
+        data_queue = Queue.Queue()
+        output_queue = Queue.Queue()
+        for page in pages:
+            data_queue.put((page.username, settings.FACEBOOK_ACCESS_TOKEN))
 
-    # Run Crawler
-    for i in range(20):
-        t = PageThread(data_queue, output_queue)
-        t.setDaemon(True)
-        t.start()
+        start_time = time.time()
 
-    data_queue.join()
+        # Run Crawler
+        for i in range(20):
+            t = PageThread(data_queue, output_queue)
+            t.setDaemon(True)
+            t.start()
 
-    while not output_queue.empty():
-        p = output_queue.get()
+        data_queue.join()
 
-        f = FbPage.objects.filter(username=p.username)[0]
-        if f:
-            f.page_id = p.page_id
-            f.name = p.name
-            f.profile_url = p.profile_url
-            f.likes = p.likes
-            f.save()
+        while not output_queue.empty():
+            p = output_queue.get()
 
-    return HttpResponse('%s seconds' % (time.time() - start_time))
+            f = FbPage.objects.filter(username=p.username)[0]
+            if f:
+                f.page_id = p.page_id
+                f.name = p.name
+                f.profile_url = p.profile_url
+                f.likes = p.likes
+                f.save()
+
+        return HttpResponse('%s seconds' % (time.time() - start_time))
+    else:
+        return HttpResponse('Unauthorized', status=401)
 
 
 class PageThread(threading.Thread):

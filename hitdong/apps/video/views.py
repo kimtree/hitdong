@@ -63,45 +63,50 @@ def view(request, video_id):
 
 
 def crawler(request):
-    # 비디오 크롤링
-    pages = FbPage.objects.all()
+    key = request.GET.get('key', '')
 
-    data_queue = Queue.Queue()
-    output_queue = Queue.Queue()
-    for page in pages:
-        data_queue.put((page, settings.FACEBOOK_ACCESS_TOKEN))
+    if key == 'kimtree':
+        # 비디오 크롤링
+        pages = FbPage.objects.all()
 
-    start_time = time.time()
+        data_queue = Queue.Queue()
+        output_queue = Queue.Queue()
+        for page in pages:
+            data_queue.put((page, settings.FACEBOOK_ACCESS_TOKEN))
 
-    # Run Crawler
-    for i in range(20):
-        t = VideoThread(data_queue, output_queue)
-        t.setDaemon(True)
-        t.start()
+        start_time = time.time()
 
-    data_queue.join()
+        # Run Crawler
+        for i in range(20):
+            t = VideoThread(data_queue, output_queue)
+            t.setDaemon(True)
+            t.start()
 
-    while not output_queue.empty():
-        video = output_queue.get()
-        print video.video_id
-        result = Video.objects.filter(video_id=video.video_id)
-        if not result:
-            page = FbPage.objects.filter(page_id=video.page_id)
-            if page:
-                page = page[0]
-            else:
-                continue
-            v = Video(page=page, video_id=video.video_id,
-                      description=video.description,
-                      thumbnail=video.thumbnail,
-                      like_count=video.like_count,
-                      comment_count=video.comment_count,
-                      created_at=video.created_at)
-            v.save()
+        data_queue.join()
 
-    cache.clear()
+        while not output_queue.empty():
+            video = output_queue.get()
+            print video.video_id
+            result = Video.objects.filter(video_id=video.video_id)
+            if not result:
+                page = FbPage.objects.filter(page_id=video.page_id)
+                if page:
+                    page = page[0]
+                else:
+                    continue
+                v = Video(page=page, video_id=video.video_id,
+                          description=video.description,
+                          thumbnail=video.thumbnail,
+                          like_count=video.like_count,
+                          comment_count=video.comment_count,
+                          created_at=video.created_at)
+                v.save()
 
-    return HttpResponse('%s seconds' % (time.time() - start_time))
+        cache.clear()
+
+        return HttpResponse('%s seconds' % (time.time() - start_time))
+    else:
+        return HttpResponse('Unauthorized', status=401)
 
 
 class VideoThread(threading.Thread):
