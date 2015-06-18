@@ -13,19 +13,20 @@ Including another URLconf
     1. Add an import:  from blog import urls as blog_urls
     2. Add a URL to urlpatterns:  url(r'^blog/', include(blog_urls))
 """
-from django.core.cache import cache
 from django.conf import settings
 from django.conf.urls import include, url
 from django.contrib import admin
-from django.views.decorators.cache import cache_page
+from django.core.cache import cache
 from django.http import HttpResponse
-from hitdong.apps.video import views as video
+from django.shortcuts import redirect
+from django.views.decorators.cache import cache_page
 from hitdong.apps.fbpage import views as page
+from hitdong.apps.video import views as video
 
 
 def flush_cache(request):
     cache.clear()
-    return HttpResponse('Done')
+    return redirect('/')
 
 
 urlpatterns = [
