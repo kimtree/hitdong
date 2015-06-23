@@ -66,13 +66,8 @@ def crawler(request):
     key = request.GET.get('key', '')
 
     if key == 'kimtree':
-        # 비디오 크롤링
-        pages = FbPage.objects.all()
-
         data_queue = Queue.Queue()
         output_queue = Queue.Queue()
-        for page in pages:
-            data_queue.put((page, settings.FACEBOOK_ACCESS_TOKEN))
 
         start_time = time.time()
 
@@ -85,6 +80,10 @@ def crawler(request):
         t = DatabaseThread(output_queue)
         t.daemon = True
         t.start()
+
+        pages = FbPage.objects.all()
+        for page in pages:
+            data_queue.put((page, settings.FACEBOOK_ACCESS_TOKEN))
 
         data_queue.join()
         output_queue.join()
