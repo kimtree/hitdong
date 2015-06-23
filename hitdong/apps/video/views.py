@@ -82,25 +82,12 @@ def crawler(request):
             t.setDaemon(True)
             t.start()
 
-        data_queue.join()
+        t = DatabaseThread(output_queue)
+        t.daemon = True
+        t.start()
 
-        while not output_queue.empty():
-            video = output_queue.get()
-            print video.video_id
-            result = Video.objects.filter(video_id=video.video_id)
-            if not result:
-                page = FbPage.objects.filter(page_id=video.page_id)
-                if page:
-                    page = page[0]
-                else:
-                    continue
-                v = Video(page=page, video_id=video.video_id,
-                          description=video.description,
-                          thumbnail=video.thumbnail,
-                          like_count=video.like_count,
-                          comment_count=video.comment_count,
-                          created_at=video.created_at)
-                v.save()
+        data_queue.join()
+        output_queue.join()
 
         cache.clear()
 
@@ -124,5 +111,32 @@ class VideoThread(threading.Thread):
 
             for video in v.videos:
                 self.output_queue.put(video)
+
+            self.data_queue.task_done()
+
+
+class DatabaseThread(threading.Thread):
+    def __init__(self, data_queue):
+        threading.Thread.__init__(self)
+        self.data_queue = data_queue
+
+    def run(self):
+        while True:
+            video = self.data_queue.get()
+            print video.video_id
+            result = Video.objects.filter(video_id=video.video_id)
+            if not result:
+                page = FbPage.objects.filter(page_id=video.page_id)
+                if page:
+                    page = page[0]
+                else:
+                    continue
+                v = Video(page=page, video_id=video.video_id,
+                          description=video.description,
+                          thumbnail=video.thumbnail,
+                          like_count=video.like_count,
+                          comment_count=video.comment_count,
+                          created_at=video.created_at)
+                v.save()
 
             self.data_queue.task_done()

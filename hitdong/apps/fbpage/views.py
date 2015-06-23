@@ -30,7 +30,7 @@ def view(request, username):
         videos = paginator.page(paginator.num_pages)
 
     return render(request, 'page.html',
-                  {'page': fbpage, 'videos': videos, 'total_count': total_count},
+                  {'page': fbpage, 'videos': videos},
                   context_instance=RequestContext(request))
 
 
@@ -53,18 +53,12 @@ def crawler(request):
             t.setDaemon(True)
             t.start()
 
+        t = DatabaseThread(output_queue)
+        t.daemon = True
+        t.start()
+
         data_queue.join()
-
-        while not output_queue.empty():
-            p = output_queue.get()
-
-            f = FbPage.objects.filter(username=p.username)[0]
-            if f:
-                f.page_id = p.page_id
-                f.name = p.name
-                f.profile_url = p.profile_url
-                f.likes = p.likes
-                f.save()
+        output_queue.join()
 
         return HttpResponse('%s seconds' % (time.time() - start_time))
     else:
@@ -85,5 +79,25 @@ class PageThread(threading.Thread):
             p.run()
 
             self.output_queue.put(p)
+
+            self.data_queue.task_done()
+
+
+class DatabaseThread(threading.Thread):
+    def __init__(self, data_queue):
+        threading.Thread.__init__(self)
+        self.data_queue = data_queue
+
+    def run(self):
+        while True:
+            p = self.data_queue.get()
+
+            f = FbPage.objects.filter(username=p.username)[0]
+            if f:
+                f.page_id = p.page_id
+                f.name = p.name
+                f.profile_url = p.profile_url
+                f.likes = p.likes
+                f.save()
 
             self.data_queue.task_done()
