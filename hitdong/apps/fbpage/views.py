@@ -38,31 +38,43 @@ def crawler(request):
     key = request.GET.get('key', '')
 
     if key == 'kimtree':
-        data_queue = Queue.Queue()
-        output_queue = Queue.Queue()
-
         start_time = time.time()
 
-        # Run Crawler
-        for i in range(20):
-            t = PageThread(data_queue, output_queue)
-            t.setDaemon(True)
-            t.start()
-
-        t = DatabaseThread(output_queue)
-        t.daemon = True
-        t.start()
-
-        pages = FbPage.objects.all()
-        for page in pages:
-            data_queue.put((page.username, settings.FACEBOOK_ACCESS_TOKEN))
-
-        data_queue.join()
-        output_queue.join()
+        import multiprocessing
+        p = multiprocessing.Process(target=subprocess)
+        p.start()
+        p.join()
 
         return HttpResponse('%s seconds' % (time.time() - start_time))
     else:
         return HttpResponse('Unauthorized', status=401)
+
+
+def subprocess():
+    import os
+    print '\n\n'
+    print os.getpid()
+    print '\n\n'
+
+    data_queue = Queue.Queue()
+    output_queue = Queue.Queue()
+
+    # Run Crawler
+    for i in range(20):
+        t = PageThread(data_queue, output_queue)
+        t.setDaemon(True)
+        t.start()
+
+    t = DatabaseThread(output_queue)
+    t.daemon = True
+    t.start()
+
+    pages = FbPage.objects.all()
+    for page in pages:
+        data_queue.put((page.username, settings.FACEBOOK_ACCESS_TOKEN))
+
+    data_queue.join()
+    output_queue.join()
 
 
 class PageThread(threading.Thread):
