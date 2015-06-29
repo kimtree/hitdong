@@ -62,8 +62,7 @@
 </script>
 <script>
   var adlib_vars = {
-      AD_ALIGN: "center",
-      cauly: "3f6GESEU"
+      AD_ALIGN: "center"
   };
 </script>
 <script src="http://ad.adlibr.com/smartad/mweb/load2.jsp?id=55785e5f0cf2d5747f1ce262&render=banner_adlib&info=adlib_vars"></script>
@@ -75,30 +74,6 @@
   function adlib_loadfailed(type,id)
   {
     // called when loading is failed
-  }
-</script>
-<script src='http://image.cauly.co.kr:15151/websdk/caulyad.min.js?2013062016' type='text/javascript'></script>
-<script type='text/javascript'>
-
-  function success_callback( info ) {
-  }
-
-  function nofill_callback( retcode ) {
-    /*   retcode 100 : non-chargeable ad */
-    if ( retcode == '100' ) return true;
-
-    /* 'return false'로 설정하면 광고가 표시되지 않습니다.  */
-    return true;
-  }
-
-  var caulyad = {
-    /*발급 ID */
-    appcode : '3f6GESEU',
-    /* 광고가 삽입될 div를 지정해주세요. */
-    displayid : 'cauly_ad_area',
-    /* callback function */
-    nofill_callback : nofill_callback,
-    success_callback : success_callback
   }
 </script>
 <script src="https://developers.kakao.com/sdk/js/kakao.min.js"></script>

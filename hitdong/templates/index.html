@@ -1,12 +1,13 @@
 {% extends "layout.html" %}
 {% load staticfiles %}
 {% block body %}
-  <div id='cauly_ad_area'></div>
+  <div id="banner_adlib"></div>
   <div class="row" style="padding-top:10px;">
   {% for video in videos %}
     {% include "video_macro.html" with use_profile=1 %}
   {% endfor %}
   </div>
+  <nav>
     <ul class="pager">
     {% if videos.has_previous %}
       <li class="previous"><a href="?page={{ videos.previous_page_number }}"><span aria-hidden="true">&larr;</span> Older</a></li>
@@ -21,5 +22,4 @@
     {% endif %}
     </ul>
   </nav>
-  <div id="banner_adlib"></div>
 {% endblock %}
