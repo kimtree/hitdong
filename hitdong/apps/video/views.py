@@ -6,7 +6,7 @@ import Queue
 from django.core.cache import cache
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.conf import settings
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from django.template import *
 from django.http import HttpResponse
 
@@ -54,12 +54,15 @@ def main(request):
 
 
 def view(request, video_id):
-    video = Video.objects.filter(video_id=video_id)[0]
+    video = Video.objects.filter(video_id=video_id).first()
+    if video:
 
-    same_page_videos = Video.objects.filter(page=video.page).exclude(video_id=video.video_id).order_by('?').all()[:2]
+        same_page_videos = Video.objects.filter(page=video.page).exclude(video_id=video.video_id).order_by('?').all()[:2]
 
-    return render(request, 'video.html', {'video': video, 'same_page_videos': same_page_videos},
-                  context_instance=RequestContext(request))
+        return render(request, 'video.html', {'video': video, 'same_page_videos': same_page_videos},
+                      context_instance=RequestContext(request))
+    else:
+        return redirect('/')
 
 
 def crawler(request):
