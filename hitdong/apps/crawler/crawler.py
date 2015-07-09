@@ -13,7 +13,7 @@ class PageCrawler(object):
     def __init__(self, username, access_token):
         self.source_name = username
         try:
-            self.fb = facebook.GraphAPI(access_token)
+            self.fb = facebook.GraphAPI(access_token, version='2.3')
         except facebook.GraphAPIError as e:
             if e.result['error']['code'] == 190:
                 pass

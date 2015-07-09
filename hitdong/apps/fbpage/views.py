@@ -11,6 +11,7 @@ from django.http import HttpResponse
 from hitdong.apps.crawler.crawler import PageCrawler
 from hitdong.apps.fbpage.models import FbPage
 from hitdong.apps.video.models import Video
+from hitdong.apps.fbpage.tasks import crawl_pages
 
 
 def view(request, username):
@@ -39,77 +40,8 @@ def crawler(request):
 
     if key == 'kimtree':
         start_time = time.time()
-
-        import multiprocessing
-        p = multiprocessing.Process(target=subprocess)
-        p.start()
-        p.join()
+        crawl_pages.delay()
 
         return HttpResponse('%s seconds' % (time.time() - start_time))
     else:
         return HttpResponse('Unauthorized', status=401)
-
-
-def subprocess():
-    import os
-    print '\n\n'
-    print os.getpid()
-    print '\n\n'
-
-    data_queue = Queue.Queue()
-    output_queue = Queue.Queue()
-
-    # Run Crawler
-    for i in range(20):
-        t = PageThread(data_queue, output_queue)
-        t.setDaemon(True)
-        t.start()
-
-    t = DatabaseThread(output_queue)
-    t.daemon = True
-    t.start()
-
-    pages = FbPage.objects.all()
-    for page in pages:
-        data_queue.put((page.username, settings.FACEBOOK_ACCESS_TOKEN))
-
-    data_queue.join()
-    output_queue.join()
-
-
-class PageThread(threading.Thread):
-    def __init__(self, data_queue, output_queue):
-        threading.Thread.__init__(self)
-        self.data_queue = data_queue
-        self.output_queue = output_queue
-
-    def run(self):
-        while True:
-            username, access_token = self.data_queue.get()
-
-            p = PageCrawler(username, access_token)
-            p.run()
-
-            self.output_queue.put(p)
-
-            self.data_queue.task_done()
-
-
-class DatabaseThread(threading.Thread):
-    def __init__(self, data_queue):
-        threading.Thread.__init__(self)
-        self.data_queue = data_queue
-
-    def run(self):
-        while True:
-            p = self.data_queue.get()
-
-            f = FbPage.objects.filter(username=p.username)[0]
-            if f:
-                f.page_id = p.page_id
-                f.name = p.name
-                f.profile_url = p.profile_url
-                f.likes = p.likes
-                f.save()
-
-            self.data_queue.task_done()

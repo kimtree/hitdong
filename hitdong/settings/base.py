@@ -1,4 +1,5 @@
 import os
+import urllib
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -90,3 +91,16 @@ FACEBOOK_APP_ID = '936263079727671'
 FACEBOOK_APP_SECRET = 'f13c37430e5f2737c7f9362c956b9e34'
 
 FACEBOOK_ACCESS_TOKEN = '936263079727671|RtctC1LG2JGWD3JXmrEcy49qlTI'
+
+# SQS
+BROKER_TRANSPORT = 'sqs'
+BROKER_TRANSPORT_OPTIONS = {
+    'region': 'ap-northeast-1',
+}
+BROKER_USER = 'AKIAJFRBQ2CCUFUSR64Q'
+BROKER_PASSWORD = 'f/6N/YNzWHMR+cEoQ6p8jVHJCDjYvIjQi1SX5+jm'
+ENCODED_BROKER_PASSWORD = urllib.quote_plus(BROKER_PASSWORD)
+CELERY_DEFAULT_QUEUE = 'hitdong'
+
+BROKER_URL = 'sqs://' + BROKER_USER + ':' + ENCODED_BROKER_PASSWORD + '@'
+BACKEND_URL = 'cache+memcached://hitdongcache.guudi7.cfg.apne1.cache.amazonaws.com:11211/'  # noqa
