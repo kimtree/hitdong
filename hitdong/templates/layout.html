@@ -60,22 +60,18 @@
   ga('create', 'UA-63946446-1', 'auto');
   ga('send', 'pageview');
 </script>
+
+<script src="http://xad.adlibr.com/script/web/smart/banner_ad.js"></script>
 <script>
-  var adlib_vars = {
-      AD_ALIGN: "center"
-  };
+    var adlib_vars = {};
+    adlib_vars.key = "55785e5f0cf2d5747f1ce262";
+    adlib_vars.ad_align = "center";
+    adlib_vars.render    = "banner_adlibr"; // div id
+    adlib_vars.hreftop   = "";
+
+    new ADLIBrBanner.init(adlib_vars);
 </script>
-<script src="http://ad.adlibr.com/smartad/mweb/load2.jsp?id=55785e5f0cf2d5747f1ce262&render=banner_adlib&info=adlib_vars"></script>
-<script>
-  function adlib_loadsucc(type,id)
-  {
-    // called when ad is loaded
-  }
-  function adlib_loadfailed(type,id)
-  {
-    // called when loading is failed
-  }
-</script>
+
 <script src="https://developers.kakao.com/sdk/js/kakao.min.js"></script>
 <script>
   Kakao.init('{{ KAKAO_API_KEY }}');
