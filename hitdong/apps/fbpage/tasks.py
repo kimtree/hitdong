@@ -18,6 +18,7 @@ def do_parse(username):
             f.likes = p.likes
             f.save()
     except:
+        print 'error ' + username
         pass
 
 
@@ -25,4 +26,4 @@ def do_parse(username):
 def crawl_pages():
     pages = FbPage.objects.all()
     for page in pages:
-        do_parse.delay(page.page_id)
+        do_parse.delay(page.username)
