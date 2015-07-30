@@ -10,7 +10,6 @@ from django.shortcuts import redirect, render
 from django.template import *
 from django.http import HttpResponse
 
-from hitdong.apps.crawler.crawler import VideoCrawler
 from hitdong.apps.video.models import Video
 from hitdong.apps.fbpage.models import FbPage
 from hitdong.apps.video.tasks import crawl_videos

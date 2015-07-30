@@ -56,19 +56,26 @@ class PageCrawler(object):
 
 
 class VideoCrawler(object):
+    def __init__(self):
+        self._videos = []
+
+    @property
+    def videos(self):
+        return self._videos
+
+    def run(self):
+        raise NotImplementedError()
+
+
+class FacebookVideoCrawler(VideoCrawler):
     def __init__(self, page_id, access_token):
+        VideoCrawler.__init__(self)
         self.page_id = page_id
         try:
             self.fb = facebook.GraphAPI(access_token)
         except facebook.GraphAPIError as e:
             if e.result['error']['code'] == 190:
                 pass
-
-        self._videos = []
-
-    @property
-    def videos(self):
-        return self._videos
 
     def run(self):
         now = datetime.datetime.now(dateutil.tz.tzlocal())
@@ -102,3 +109,9 @@ class VideoCrawler(object):
                 posts = requests.get(posts['paging']['next']).json()
             except KeyError:
                 break
+
+
+class YoutubeVideoCrawler(VideoCrawler):
+    def __init__(self):
+        VideoCrawler.__init__(self)
+        pass

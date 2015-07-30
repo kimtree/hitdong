@@ -2,7 +2,7 @@ from celery import task
 from celery import group
 from django.core.cache import cache
 from django.conf import settings
-from hitdong.apps.crawler.crawler import VideoCrawler
+from hitdong.apps.crawler.crawler import FacebookVideoCrawler
 from hitdong.apps.fbpage.models import FbPage
 from hitdong.apps.video.models import Video
 
@@ -10,7 +10,7 @@ from hitdong.apps.video.models import Video
 @task
 def do_parse(page_id):
     try:
-        crawler = VideoCrawler(page_id, settings.FACEBOOK_ACCESS_TOKEN)
+        crawler = FacebookVideoCrawler(page_id, settings.FACEBOOK_ACCESS_TOKEN)
         crawler.run()
 
         for video in crawler.videos:
