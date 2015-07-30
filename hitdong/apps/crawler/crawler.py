@@ -112,6 +112,30 @@ class FacebookVideoCrawler(VideoCrawler):
 
 
 class YoutubeVideoCrawler(VideoCrawler):
-    def __init__(self):
+    def __init__(self, channel_id, access_token):
         VideoCrawler.__init__(self)
-        pass
+        self.channel_id = channel_id
+        self.access_token = access_token
+
+    def run(self):
+        url = 'https://www.googleapis.com/youtube/v3/channels?part=contentDetails'
+        param = {
+            'id': self.channel_id,
+            'key': self.access_token
+        }
+        data = requests.get(url, params=param).json()
+
+        playlist_id = data['items'][0]['contentDetails']['relatedPlaylists']['uploads']
+
+        url = 'https://www.googleapis.com/youtube/v3/playlistItems?part=snippet%2CcontentDetails%2Cstatus'
+        param = {
+            'playlistId': playlist_id,
+            'key': self.access_token
+        }
+        data = requests.get(url, params=param).json()
+
+        for item in data['items']:
+            created_at = dateutil.parser.parse(item['snippet']['publishedAt']).astimezone(dateutil.tz.tzlocal())
+            print created_at
+            print item['snippet']['title']
+            print item['contentDetails']['videoId']
