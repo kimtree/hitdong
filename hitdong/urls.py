@@ -17,24 +17,22 @@ from django.conf import settings
 from django.conf.urls import include, url
 from django.contrib import admin
 from django.core.cache import cache
-from django.http import HttpResponse
 from django.shortcuts import redirect
 from django.views.decorators.cache import cache_page
-from hitdong.apps.fbpage import views as page
 from hitdong.apps.video import views as video
+from hitdong.apps.channel import views as channel
 
 
 def flush_cache(request):
     cache.clear()
     return redirect('/')
 
-
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
     url(r'^$', cache_page(60 * 60 * 24)(video.main)),
-    url(r'^p/(?P<username>\w+)$', page.view),
-    url(r'^v/(?P<video_id>[0-9]+)$', video.view),
-    url(r'^crawler/page$', page.crawler),
+    url(r'^p/(?P<username>\w+)$', channel.view),
+    url(r'^v/(?P<video_id>\S+)$', video.view),
+    url(r'^crawler/channel', channel.crawler),
     url(r'^crawler/video$', video.crawler),
     url(r'^flush$', flush_cache)
 ]

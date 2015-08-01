@@ -1,26 +1,20 @@
 import time
-import threading
-import Queue
 
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from django.conf import settings
 from django.shortcuts import render
 from django.template import *
 from django.http import HttpResponse
 
-from hitdong.apps.crawler.crawler import PageCrawler
-from hitdong.apps.fbpage.models import FbPage
+from hitdong.apps.channel.models import Channel
 from hitdong.apps.video.models import Video
-from hitdong.apps.fbpage.tasks import crawl_pages
+from hitdong.apps.channel.tasks import crawl_pages
 
 
 def view(request, username):
-    fbpage = FbPage.objects.filter(username=username)[0]
+    channel = Channel.objects.filter(id=username)[0]
 
-    videos = Video.objects.filter(page=fbpage).order_by('-id')
-
+    videos = Video.objects.filter(channel=channel).order_by('-id')
     paginator = Paginator(videos, 10)
-    total_count = paginator.count
 
     page = request.GET.get('page')
     try:
@@ -30,8 +24,8 @@ def view(request, username):
     except EmptyPage:
         videos = paginator.page(paginator.num_pages)
 
-    return render(request, 'page.html',
-                  {'page': fbpage, 'videos': videos},
+    return render(request, 'channel.html',
+                  {'channel': channel, 'videos': videos},
                   context_instance=RequestContext(request))
 
 

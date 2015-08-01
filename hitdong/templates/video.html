@@ -17,13 +17,13 @@
   fjs.parentNode.insertBefore(js, fjs);
   }(document, 'script', 'facebook-jssdk'));</script>
   <div class="media" style="padding-bottom:20px;">
-    <a href="/p/{{ video.page.username }}">
+    <a href="/p/{{ video.channel.id }}">
       <div class="media-left">
-        <img class="media-object" src="{{ video.page.profile_url }}">
+        <img class="media-object" src="{{ video.channel.profile_url }}">
       </div>
       <div class="media-body">
         <h4 class="media-heading">&nbsp;</h4>
-        {{ video.page.name }}
+        {{ video.channel.name }}
       </div>
     </a>
   </div>
@@ -39,9 +39,9 @@
       {% for video in same_page_videos %}
         <div class="col-xs-6">
           <div class="thumbnail">
-            <a href="/v/{{ video.video_id }}" onClick="ga('send', 'event', 'video', 'recommend', '{{ video.video_id }}');"><img src="{{ video.thumbnail }}"></a>
+            <a href="/v/{{ video.id }}" onClick="ga('send', 'event', 'video', 'recommend', '{{ video.id }}');"><img src="{{ video.thumbnail }}"></a>
             <div class="caption" style="word-break: break-all;">
-              <p>{{ video.description|linebreaksbr|urlize }}</p>
+              <p>{{ video.description|linebreaksbr }}</p>
             </div>
           </div>
         </div>

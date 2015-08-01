@@ -1,15 +1,14 @@
 from django.db import models
-from hitdong.apps.fbpage.models import FbPage
+from hitdong.apps.channel.models import Channel
 
 
 class Video(models.Model):
-    page = models.ForeignKey(FbPage)
-    video_id = models.BigIntegerField(unique=True)
+    channel = models.ForeignKey(Channel)
+    id = models.CharField(primary_key=True, max_length=100, unique=True)
     description = models.TextField(blank=True)
     thumbnail = models.URLField(max_length=400)
-    like_count = models.IntegerField()
-    comment_count = models.IntegerField()
     created_at = models.DateTimeField()
+    metric = models.IntegerField()
 
     def __unicode__(self):
-        return str(self.video_id)
+        return str(self.id)

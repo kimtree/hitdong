@@ -25,7 +25,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'hitdong.apps.video',
-    'hitdong.apps.fbpage'
+    'hitdong.apps.channel'
 )
 
 MIDDLEWARE_CLASSES = (

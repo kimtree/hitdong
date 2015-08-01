@@ -11,7 +11,7 @@ DATABASES = {
         'OPTIONS': {
             'init_command': 'SET storage_engine=INNODB',
         },
-
+        'STORAGE_ENGINE': 'INNODB'
     }
 }
 
