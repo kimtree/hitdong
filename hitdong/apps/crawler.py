@@ -40,18 +40,21 @@ class FacebookChannelCrawler(ChannelCrawler):
 
 
 class YoutubeChannelCrawler(ChannelCrawler):
-    def __init__(self, username, access_token):
-        ChannelCrawler.__init__(self, 1, username)
-        self.username = username
+    def __init__(self, origin_id, access_token):
+        ChannelCrawler.__init__(self, 1, origin_id)
         self.access_token = access_token
 
-    def get_profile_by_username(self):
+    def get_profile(self):
         # Get profile
         url = 'https://www.googleapis.com/youtube/v3/channels?part=snippet'
         param = {
-            'forUsername': self.username,
             'key': self.access_token
         }
+        if self.origin_id[:2] == 'UC':
+            param['id'] = self.origin_id
+        else:
+            param['forUsername'] = self.origin_id
+
         data = requests.get(url, params=param).json()
 
         if len(data['items']) == 0:
@@ -61,15 +64,15 @@ class YoutubeChannelCrawler(ChannelCrawler):
 
     def run(self):
         # Get profile
-        data = self.get_profile_by_username()
+        data = self.get_profile()
         if data:
             self.name = data['items'][0]['snippet']['localized']['title']
             self.profile_url = data['items'][0]['snippet']['thumbnails']['default']['url']
+            self.origin_id = data['items'][0]['id']
 
 
 class VideoCrawler(object):
-    def __init__(self, username):
-        self.username = username
+    def __init__(self):
         self._videos = []
         now = datetime.datetime.now(dateutil.tz.tzlocal())
         yesterday = datetime.datetime.now(dateutil.tz.tzlocal()) - datetime.timedelta(days=1)
@@ -93,7 +96,8 @@ class VideoCrawler(object):
 
 class FacebookVideoCrawler(VideoCrawler):
     def __init__(self, username, access_token):
-        VideoCrawler.__init__(self, username)
+        VideoCrawler.__init__(self)
+        self.username = username
         try:
             self.fb = facebook.GraphAPI(access_token)
         except facebook.GraphAPIError as e:
@@ -134,31 +138,33 @@ class FacebookVideoCrawler(VideoCrawler):
 
 
 class YoutubeVideoCrawler(VideoCrawler):
-    def __init__(self, username, access_token):
-        VideoCrawler.__init__(self, username)
+    def __init__(self, channel_id, access_token):
+        VideoCrawler.__init__(self)
+        self.channel_id = channel_id
         self.access_token = access_token
 
-    def get_channel_id(self):
-        channel = YoutubeChannelCrawler(self.username, self.access_token)
-        user = channel.get_profile_by_username()
-
-        if len(user['items']) == 0:
-            return None
-
-        return user['items'][0]['id']
-
-    def run(self):
-        channel_id = self.get_channel_id()
+    def get_upload_playlist_id(self):
+        playlist_id = None
         url = 'https://www.googleapis.com/youtube/v3/channels?part=contentDetails'
+
         param = {
-            'id': channel_id,
             'key': self.access_token
         }
+        if self.channel_id[:2] == 'UC':
+            param['id'] = self.channel_id
+        else:
+            param['forUsername'] = self.channel_id
+
         data = requests.get(url, params=param).json()
 
         if len(data['items']) > 0:
             playlist_id = data['items'][0]['contentDetails']['relatedPlaylists']['uploads']
 
+        return playlist_id
+
+    def run(self):
+        playlist_id = self.get_upload_playlist_id()
+        if playlist_id:
             url = 'https://www.googleapis.com/youtube/v3/playlistItems?part=snippet%2CcontentDetails%2Cstatus'
             param = {
                 'playlistId': playlist_id,
@@ -170,12 +176,12 @@ class YoutubeVideoCrawler(VideoCrawler):
                 created_at = self.convert_timezone(item['snippet']['publishedAt'])
 
                 if self.yesterday <= created_at < self.today:
-                    v = Video(self.username,
-                          item['contentDetails']['videoId'],
-                          item['snippet']['description'],
-                          item['snippet']['thumbnails']['high']['url'],
-                          created_at,
-                          100)
+                    v = Video(self.channel_id,
+                              item['contentDetails']['videoId'],
+                              item['snippet']['description'],
+                              item['snippet']['thumbnails']['high']['url'],
+                              created_at,
+                              100)
                     self._videos.append(v)
                 elif created_at < self.yesterday:
                     break

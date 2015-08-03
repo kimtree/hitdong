@@ -10,16 +10,17 @@ def do_parse(type, origin_id):
     try:
         if type == 0:
             p = FacebookChannelCrawler(origin_id, settings.FACEBOOK_ACCESS_TOKEN)
-            p.run()
         elif type == 1:
             p = YoutubeChannelCrawler(origin_id, settings.YOUTUBE_ACCESS_TOKEN)
 
         p.run()
 
-        f = Channel.objects.filter(origin_id=p.origin_id).first()
+        f = Channel.objects.filter(origin_id=origin_id).first()
         if f:
             f.name = p.name
             f.profile_url = p.profile_url
+            if type == 1:
+                f.origin_id = p.origin_id
             f.save()
     except:
         print 'error ' + origin_id

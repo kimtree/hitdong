@@ -27,6 +27,11 @@ def flush_cache(request):
     cache.clear()
     return redirect('/')
 
+
+def test(request):
+    pass
+
+
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
     url(r'^$', cache_page(60 * 60 * 24)(video.main)),
@@ -35,7 +40,8 @@ urlpatterns = [
     url(r'^v/(?P<video_id>\S+)$', video.view),
     url(r'^crawler/channel', channel.crawler),
     url(r'^crawler/video$', video.crawler),
-    url(r'^flush$', flush_cache)
+    url(r'^flush$', flush_cache),
+    url(r'^test$', test)
 ]
 
 urlpatterns += [url(r'^static/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.STATIC_ROOT})]

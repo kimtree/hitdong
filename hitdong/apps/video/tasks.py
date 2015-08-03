@@ -21,7 +21,7 @@ def do_parse(type, origin_id):
             if video.id:
                 result = Video.objects.filter(id=video.id).first()
                 if not result:
-                    channel = Channel.objects.filter(origin_id=video.username).first()
+                    channel = Channel.objects.filter(origin_id=origin_id).first()
                     if channel:
                         v = Video(channel=channel,
                                   id=video.id,
