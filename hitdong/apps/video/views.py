@@ -13,7 +13,7 @@ from hitdong.apps.video.tasks import crawl_videos
 def main(request):
     video_list = Video.objects.select_related()
     video_list = video_list.extra(select={'date': 'date(created_at)'})
-    video_list = video_list.extra(order_by=['-date', '-metric'])
+    video_list = video_list.extra(order_by=['-date'])
 
     paginator = Paginator(video_list, 5)
     total_count = paginator.count
