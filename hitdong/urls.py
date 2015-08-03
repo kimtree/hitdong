@@ -30,7 +30,8 @@ def flush_cache(request):
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
     url(r'^$', cache_page(60 * 60 * 24)(video.main)),
-    url(r'^p/(?P<username>\w+)$', channel.view),
+    url(r'^p/(?P<username>\w+)$', channel.legacy),
+    url(r'^c/(?P<id>\w+)$', channel.view),
     url(r'^v/(?P<video_id>\S+)$', video.view),
     url(r'^crawler/channel', channel.crawler),
     url(r'^crawler/video$', video.crawler),

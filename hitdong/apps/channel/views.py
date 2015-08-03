@@ -1,7 +1,7 @@
 import time
 
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from django.template import *
 from django.http import HttpResponse
 
@@ -10,8 +10,10 @@ from hitdong.apps.video.models import Video
 from hitdong.apps.channel.tasks import crawl_pages
 
 
-def view(request, username):
-    channel = Channel.objects.filter(id=username)[0]
+def view(request, id):
+    channel = Channel.objects.get(id=id)
+    if not channel:
+        return redirect('/')
 
     videos = Video.objects.filter(channel=channel).order_by('-id')
     paginator = Paginator(videos, 10)
@@ -27,6 +29,16 @@ def view(request, username):
     return render(request, 'channel.html',
                   {'channel': channel, 'videos': videos},
                   context_instance=RequestContext(request))
+
+
+def legacy(request, username):
+    channel = Channel.objects.filter(origin_id=username)
+    if not channel:
+        return redirect('/')
+    else:
+        channel = channel[0]
+
+    return redirect('/c/' + str(channel.id), permanent=True)
 
 
 def crawler(request):
