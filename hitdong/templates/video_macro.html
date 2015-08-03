@@ -15,8 +15,19 @@
                data-allowfullscreen="true"
                data-width="400">
           </div>
+          <script>
+            var fbVideoChecker = setInterval(function(){
+              var state = $('.fb-video').attr('fb-xfbml-state');
+              if (state == 'rendered') {
+                $('.loader').remove();
+                clearInterval(fbVideoChecker);
+              }
+            },100);
+          </script>
         {% elif video.channel.type == 1 %}
-            <iframe width="560" height="315" src="https://www.youtube.com/embed/{{ video.id }}" frameborder="0" allowfullscreen></iframe>
+          <div class="responsive-container">
+            <iframe src="https://www.youtube.com/embed/{{ video.id }}" frameborder="0" allowfullscreen></iframe>
+          </div>
         {% endif %}
     {% else %}
       <a href="/v/{{ video.id }}"><img src="{{ video.thumbnail }}" width="500" height="300"></a>
@@ -49,13 +60,3 @@
     </div>
   </div>
 </div>
-
-<script>
-  var fbVideoChecker = setInterval(function(){
-    var state = $('.fb-video').attr('fb-xfbml-state');
-    if (state == 'rendered') {
-      $('.loader').remove();
-      clearInterval(fbVideoChecker);
-    }
-  },100);
-</script>
