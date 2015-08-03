@@ -11,8 +11,9 @@ from hitdong.apps.channel.tasks import crawl_pages
 
 
 def view(request, id):
-    channel = Channel.objects.get(id=id)
-    if not channel:
+    try:
+        channel = Channel.objects.get(id=id)
+    except:
         return redirect('/')
 
     videos = Video.objects.filter(channel=channel).order_by('-id')
