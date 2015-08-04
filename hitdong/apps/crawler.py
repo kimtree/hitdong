@@ -40,13 +40,14 @@ class FacebookChannelCrawler(ChannelCrawler):
 
 
 class YoutubeChannelCrawler(ChannelCrawler):
+    BASE_URL = 'https://www.googleapis.com/youtube/v3/'
+
     def __init__(self, origin_id, access_token):
         ChannelCrawler.__init__(self, 1, origin_id)
         self.access_token = access_token
 
     def get_profile(self):
-        # Get profile
-        url = 'https://www.googleapis.com/youtube/v3/channels?part=snippet'
+        url = self.BASE_URL + 'channels?part=snippet'
         param = {
             'key': self.access_token
         }
@@ -66,8 +67,9 @@ class YoutubeChannelCrawler(ChannelCrawler):
         # Get profile
         data = self.get_profile()
         if data:
-            self.name = data['items'][0]['snippet']['localized']['title']
-            self.profile_url = data['items'][0]['snippet']['thumbnails']['default']['url']
+            snippet = data['items'][0]['snippet']
+            self.name = snippet['localized']['title']
+            self.profile_url = snippet['thumbnails']['default']['url']
             self.origin_id = data['items'][0]['id']
 
 
@@ -90,7 +92,7 @@ class VideoCrawler(object):
         raise NotImplementedError()
 
     @staticmethod
-    def convert_timezone(time):
+    def convert_tz(time):
         return dateutil.parser.parse(time).astimezone(dateutil.tz.tzlocal())
 
 
@@ -111,7 +113,7 @@ class FacebookVideoCrawler(VideoCrawler):
             try:
                 ended = False
                 for post in posts['data']:
-                    created_at = self.convert_timezone(post['created_time'])
+                    created_at = self.convert_tz(post['created_time'])
                     if self.yesterday <= created_at < self.today:
                         thumbnail_select_idx = int(round(len(post['format']) / 2)) - 1
                         thumbnail = post['format'][thumbnail_select_idx]['picture']
@@ -138,6 +140,8 @@ class FacebookVideoCrawler(VideoCrawler):
 
 
 class YoutubeVideoCrawler(VideoCrawler):
+    BASE_URL = 'https://www.googleapis.com/youtube/v3/'
+
     def __init__(self, channel_id, access_token):
         VideoCrawler.__init__(self)
         self.channel_id = channel_id
@@ -145,8 +149,7 @@ class YoutubeVideoCrawler(VideoCrawler):
 
     def get_upload_playlist_id(self):
         playlist_id = None
-        url = 'https://www.googleapis.com/youtube/v3/channels?part=contentDetails'
-
+        url = self.BASE_URL + 'channels?part=contentDetails'
         param = {
             'key': self.access_token
         }
@@ -158,30 +161,56 @@ class YoutubeVideoCrawler(VideoCrawler):
         data = requests.get(url, params=param).json()
 
         if len(data['items']) > 0:
-            playlist_id = data['items'][0]['contentDetails']['relatedPlaylists']['uploads']
+            contents_detail = data['items'][0]['contentDetails']
+            playlist_id = contents_detail['relatedPlaylists']['uploads']
 
         return playlist_id
+
+    def get_playlist_items(self, playlist_id):
+        url = self.BASE_URL + 'playlistItems?part=snippet'
+        param = {
+            'playlistId': playlist_id,
+            'key': self.access_token
+        }
+        data = requests.get(url, params=param).json()
+
+        return data
+
+    def get_metric(self, video_id):
+        url = self.BASE_URL + 'videos?part=statistics'
+        param = {
+            'key': self.access_token,
+            'id': video_id
+        }
+        data = requests.get(url, params=param).json()
+
+        stat = data['items'][0]['statistics']
+
+        view = int(stat['viewCount'])
+        like = int(stat['likeCount'])
+        dislike = int(stat['dislikeCount'])
+        comments = int(stat['commentCount'])
+
+        metric = int(round((like - dislike) * ((view / 80) + comments)))
+
+        return metric
 
     def run(self):
         playlist_id = self.get_upload_playlist_id()
         if playlist_id:
-            url = 'https://www.googleapis.com/youtube/v3/playlistItems?part=snippet%2CcontentDetails%2Cstatus'
-            param = {
-                'playlistId': playlist_id,
-                'key': self.access_token
-            }
-            data = requests.get(url, params=param).json()
-
+            data = self.get_playlist_items(playlist_id)
             for item in data['items']:
-                created_at = self.convert_timezone(item['snippet']['publishedAt'])
-
+                created_at = self.convert_tz(item['snippet']['publishedAt'])
                 if self.yesterday <= created_at < self.today:
+                    video_id = item['snippet']['resourceId']['videoId']
+                    metric = self.get_metric(video_id)
+
                     v = Video(self.channel_id,
-                              item['contentDetails']['videoId'],
+                              video_id,
                               item['snippet']['description'],
                               item['snippet']['thumbnails']['high']['url'],
                               created_at,
-                              100)
+                              metric)
                     self._videos.append(v)
                 elif created_at < self.yesterday:
                     break

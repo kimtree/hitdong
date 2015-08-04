@@ -16,7 +16,10 @@ def view(request, id):
     except:
         return redirect('/')
 
-    videos = Video.objects.filter(channel=channel).order_by('-id')
+    videos = Video.objects.filter(channel=channel).select_related()
+    videos = videos.extra(select={'date': 'date(created_at)'})
+    videos = videos.order_by('-date', '-metric', '-created_at')
+
     paginator = Paginator(videos, 10)
 
     page = request.GET.get('page')
