@@ -70,8 +70,11 @@ def video_tagger(video):
     tags = []
     for k, v in text_to_tag_id.items():
         if k.lower() in video.description.lower():
-            tag = Tag.objects.get(pk=v)
-            tags.append(tag)
+            try:
+                tag = Tag.objects.get(pk=v)
+                tags.append(tag)
+            except:
+                pass
 
     for tag in tags:
         video.tags.add(tag)
