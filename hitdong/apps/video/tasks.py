@@ -33,7 +33,7 @@ def do_parse(type, origin_id):
                                   metric=video.metric)
                         v.save()
 
-                        video_tagger.delay(v, video.description)
+                        video_tagger.delay(v)
         cache.clear()
     except:
         print 'error ' + str(origin_id)
@@ -41,7 +41,7 @@ def do_parse(type, origin_id):
 
 
 @task
-def video_tagger(video, description):
+def video_tagger(video):
     text_to_tag_id = {
         'MV': 2,
         u'여자친구': 5,
@@ -57,7 +57,7 @@ def video_tagger(video, description):
 
     tags = []
     for k, v in text_to_tag_id.items():
-        if k.lower() in description.lower():
+        if k.lower() in video.description.lower():
             tag = Tag.objects.get(pk=v)
             tags.append(tag)
 
