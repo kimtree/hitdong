@@ -61,7 +61,11 @@ def crawler(request):
 
 
 def tag(request, tag_id):
-    tag = Tag.objects.get(pk=tag_id)
+    try:
+        tag = Tag.objects.get(pk=tag_id)
+    except:
+        return redirect('/')
+
     video_list = Video.objects.filter(tags=tag_id)
 
     paginator = Paginator(video_list, 5)
