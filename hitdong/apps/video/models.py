@@ -15,7 +15,10 @@ class Video(models.Model):
     tags = models.ManyToManyField('Tag')
 
     def __unicode__(self):
-        return str(self.id) + ' ' + self.title
+        if self.title.strip():
+            return str(self.id) + ' ' + self.title
+        else:
+            return self.description.split('\n')[0]
 
 
 class Tag(models.Model):
