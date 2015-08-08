@@ -37,14 +37,19 @@
       <div class="media" style="padding-bottom:20px;">
         <a href="/c/{{ video.channel.id }}">
           <div class="media-left">
-            <img class="media-object" src="{{ video.channel.profile_url }}">
+            <img class="media-object" src="{{ video.channel.profile_url }}" height="20">
           </div>
           <div class="media-body">
-            <h4 class="media-heading">{{ video.channel.name }}</h4>
+            <h5 class="media-heading">{{ video.channel.name }}</h5>
           </div>
         </a>
       </div>
       {% endif %}
+      <p>
+        {% for tag in video.tags.all %}
+          <a href="/tag/{{ tag.id }}" style="text-decoration:none;"><span class="label label-danger">#{{ tag.name }}</span></a>
+        {% endfor %}
+      </p>
       <p>{{ video.description|linebreaksbr }}</p>
       <ul class="list-inline text-center">
         <li>
