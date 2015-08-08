@@ -33,7 +33,7 @@ def do_parse(type, origin_id):
                                   metric=video.metric)
                         v.save()
 
-                        video_tagger.delay(video, video.description)
+                        video_tagger.delay(v, video.description)
         cache.clear()
     except:
         print 'error ' + str(origin_id)
