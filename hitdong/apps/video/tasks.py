@@ -25,6 +25,7 @@ def do_parse(type, origin_id):
                     if channel:
                         v = Video(channel=channel,
                                   id=video.id,
+                                  title=video.title,
                                   description=video.description,
                                   thumbnail=video.thumbnail,
                                   created_at=video.created_at,

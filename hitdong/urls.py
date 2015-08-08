@@ -38,6 +38,7 @@ urlpatterns = [
     url(r'^p/(?P<username>\w+)$', channel.legacy),
     url(r'^c/(?P<id>\w+)$', channel.view),
     url(r'^v/(?P<video_id>\S+)$', video.view),
+    url(r'^tag/(?P<tag_id>\S+)$', video.tag),
     url(r'^crawler/channel', channel.crawler),
     url(r'^crawler/video$', video.crawler),
     url(r'^flush$', flush_cache),

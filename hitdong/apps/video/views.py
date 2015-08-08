@@ -6,7 +6,7 @@ from django.shortcuts import redirect, render
 from django.template import *
 from django.http import HttpResponse
 
-from hitdong.apps.video.models import Video
+from hitdong.apps.video.models import Video, Tag
 from hitdong.apps.video.tasks import crawl_videos
 
 
@@ -58,3 +58,22 @@ def crawler(request):
         return HttpResponse('%s seconds' % (time.time() - start_time))
     else:
         return HttpResponse('Unauthorized', status=401)
+
+
+def tag(request, tag_id):
+    tag = Tag.objects.get(pk=tag_id)
+    video_list = Video.objects.filter(tags=tag_id)
+
+    paginator = Paginator(video_list, 5)
+
+    page = request.GET.get('page')
+    try:
+        videos = paginator.page(page)
+    except PageNotAnInteger:
+        videos = paginator.page(1)
+    except EmptyPage:
+        videos = paginator.page(paginator.num_pages)
+
+    return render(request, 'tag.html',
+                  {'videos': videos, 'tag': tag},
+                  context_instance=RequestContext(request))

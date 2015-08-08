@@ -6,7 +6,7 @@ import dateutil.tz
 import facebook
 import requests
 
-Video = collections.namedtuple('Video', 'username, id, description, thumbnail, created_at, metric')
+Video = collections.namedtuple('Video', 'username, id, title, description, thumbnail, created_at, metric')
 
 
 class ChannelCrawler(object):
@@ -123,6 +123,7 @@ class FacebookVideoCrawler(VideoCrawler):
 
                         v = Video(self.username,
                                   post['id'],
+                                  ' ',
                                   post['description'],
                                   thumbnail,
                                   created_at,
@@ -207,6 +208,7 @@ class YoutubeVideoCrawler(VideoCrawler):
 
                     v = Video(self.channel_id,
                               video_id,
+                              item['snippet']['title'],
                               item['snippet']['description'],
                               item['snippet']['thumbnails']['high']['url'],
                               created_at,
