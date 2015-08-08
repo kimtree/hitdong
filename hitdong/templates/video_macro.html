@@ -35,14 +35,12 @@
     <div class="caption">
       {% if use_profile %}
       <div class="media" style="padding-bottom:20px;">
-        <a href="/c/{{ video.channel.id }}">
-          <div class="media-left">
-            <img class="media-object" src="{{ video.channel.profile_url }}" height="20">
-          </div>
-          <div class="media-body">
-            <h5 class="media-heading">{{ video.channel.name }}</h5>
-          </div>
-        </a>
+        <div class="media-left">
+          <img class="media-object" src="{{ video.channel.profile_url }}" height="18">
+        </div>
+        <div class="media-body">
+          <h5 class="media-heading"><a href="/c/{{ video.channel.id }}">{{ video.channel.name }}</a> <small>{{ video.created_at|date:'Y-m-d H:i:s' }}</small></h5>
+        </div>
       </div>
       {% endif %}
       <p>
