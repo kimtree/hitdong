@@ -38,7 +38,7 @@ def main(request):
 def view(request, video_id):
     video = Video.objects.filter(id=video_id, is_open=True).first()
     if video:
-        same_page_videos = Video.objects.filter(channel=video.channel)\
+        same_page_videos = Video.objects.filter(channel=video.channel, is_open=True)\
                                 .exclude(id=video.id)\
                                 .order_by('?').all()[:2]
 
