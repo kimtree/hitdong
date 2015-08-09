@@ -16,7 +16,8 @@ def view(request, id):
     except:
         return redirect('/')
 
-    videos = Video.objects.filter(channel=channel).select_related()
+    videos = Video.objects.filter(channel=channel, is_open=True)
+    videos = videos.select_related()
     videos = videos.extra(select={'date': 'date(created_at)'})
     videos = videos.order_by('-date', '-metric', '-created_at')
 

@@ -12,6 +12,7 @@ from hitdong.apps.video.tasks import crawl_videos
 
 def main(request):
     video_list = Video.objects.select_related()
+    video_list = video_list.filter(is_open=True)
     video_list = video_list.extra(select={'date': 'date(created_at)'})
     video_list = video_list.order_by('-date', '-metric', '-created_at')
 
@@ -35,7 +36,7 @@ def main(request):
 
 
 def view(request, video_id):
-    video = Video.objects.filter(id=video_id).first()
+    video = Video.objects.filter(id=video_id, is_open=True).first()
     if video:
         same_page_videos = Video.objects.filter(channel=video.channel)\
                                 .exclude(id=video.id)\
@@ -66,7 +67,7 @@ def tag(request, tag_id):
     except:
         return redirect('/')
 
-    video_list = Video.objects.filter(tags=tag_id)
+    video_list = Video.objects.filter(tags=tag_id, is_open=True)
 
     paginator = Paginator(video_list, 5)
 
