@@ -1,4 +1,6 @@
 {% load staticfiles %}
+{% load tz %}
+{% timezone None %}
 <div class="col-md-12">
   <div class="thumbnail">
     {% if use_video %}
@@ -63,3 +65,4 @@
     </div>
   </div>
 </div>
+{% endtimezone %}
