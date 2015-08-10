@@ -24,13 +24,17 @@ def do_parse(type, origin_id):
                 if not result:
                     channel = Channel.objects.filter(origin_id=origin_id).first()
                     if channel:
+                        if channel.id == 2:
+                            description = video.description.split('\n')[0]
+
                         v = Video(channel=channel,
                                   id=video.id,
                                   title=video.title,
-                                  description=video.description,
+                                  description=description,
                                   thumbnail=video.thumbnail,
                                   created_at=video.created_at,
-                                  metric=video.metric)
+                                  metric=video.metric,
+                                  is_open=True)
                         v.save()
 
                         video_tagger.delay(v)
