@@ -10,4 +10,8 @@ app = Celery('hitdong',
              backend=settings.BACKEND_URL,
              broker=settings.BROKER_URL)
 
+app.conf.update(
+    BROKER_TRANSPORT_OPTIONS=setting.BROKER_TRANSPORT_OPTIONS
+)
+
 app.autodiscover_tasks(lambda: settings.INSTALLED_APPS)
