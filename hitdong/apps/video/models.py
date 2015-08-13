@@ -5,7 +5,7 @@ from hitdong.apps.channel.models import Channel
 
 class Video(models.Model):
     channel = models.ForeignKey(Channel)
-    id = models.CharField(primary_key=True, max_length=100, editable=False)
+    id = models.CharField(primary_key=True, max_length=100)
     title = models.CharField(max_length=200, verbose_name=u'동영상 제목')
     description = models.TextField(blank=True)
     thumbnail = models.URLField(max_length=400)
