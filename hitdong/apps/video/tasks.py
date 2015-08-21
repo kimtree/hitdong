@@ -24,8 +24,9 @@ def do_parse(type, origin_id):
                 if not result:
                     channel = Channel.objects.filter(origin_id=origin_id).first()
                     if channel:
+                        description = video.description
                         if channel.id == 2:
-                            description = video.description.split('\n')[0]
+                            description = description.split('\n')[0]
 
                         v = Video(channel=channel,
                                   id=video.id,
