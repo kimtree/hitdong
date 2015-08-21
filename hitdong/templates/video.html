@@ -16,36 +16,46 @@
   js.src = "//connect.facebook.net/ko_KR/sdk.js#xfbml=1&version=v2.3";
   fjs.parentNode.insertBefore(js, fjs);
   }(document, 'script', 'facebook-jssdk'));</script>
-  <div class="media" style="padding-bottom:20px;">
-    <a href="/c/{{ video.channel.id }}">
-      <div class="media-left">
-        <img class="media-object" src="{{ video.channel.profile_url }}">
-      </div>
-      <div class="media-body">
-        <h4 class="media-heading">&nbsp;</h4>
-        {{ video.channel.name }}
-      </div>
-    </a>
+
+<div class="media" style="padding-top:0px;">
+  <div class="media-left">
+    <img class="media-object" src="{{ video.channel.profile_url }}" height="18">
   </div>
+  <div class="media-body">
+    <h5 class="media-heading">
+      <a href="/c/{{ video.channel.id }}">{{ video.channel.name }}</a>
+    </h5>
+  </div>
+</div>
+
+<div class="row">
+  {% include "tmpl_video_player.html" with use_profile=0 use_video=1 %}
+</div>
+
+<div id="banner_adlibr"></div>
+
+{% if same_page_videos|length > 0 %}
   <div class="row">
-    {% include "video_macro.html" with use_profile=0 use_video=1 %}
-  </div>
-  <div id="banner_adlibr"></div>
-  {% if same_page_videos|length > 0 %}
-    <div class="row">
-      <div class="col-xs-12">
-        <h4>이 페이지의 다른 동영상</h4>
-      </div>
-      {% for video in same_page_videos %}
-        <div class="col-xs-6">
-          <div class="thumbnail">
-            <a href="/v/{{ video.id }}" onClick="ga('send', 'event', 'video', 'recommend', '{{ video.id }}');"><img src="{{ video.thumbnail }}"></a>
-            <div class="caption" style="word-break: break-all;">
-              <p>{{ video.description|linebreaksbr }}</p>
-            </div>
+    <div class="col-xs-12">
+      <h4>이 페이지의 다른 동영상</h4>
+    </div>
+    {% for video in same_page_videos %}
+      <div class="col-xs-6">
+        <div class="thumbnail">
+          <a href="/v/{{ video.id }}" onClick="ga('send', 'event', 'video', 'recommend', '{{ video.id }}');"><img src="{{ video.thumbnail }}"></a>
+          <div class="caption" style="word-break: break-all;">
+            <p>
+            {% if video.title|length > 1 %}
+              {{ video.title }}
+            {% elif video.description|length > 1 %}
+              {{ video.description|truncatechars:32 }}
+            {% endif %}
+            </p>
           </div>
         </div>
-      {% endfor %}
-    </div>
-  {% endif %}
+      </div>
+    {% endfor %}
+  </div>
+{% endif %}
+
 {% endblock %}

@@ -15,12 +15,13 @@
   <meta name="og:description" content="{% block description %}오늘의 히트 동영상!{% endblock %}">
   <meta name="og:image" content="{% block fb_thumbnail %}{% static "img/logo.png" %}{% endblock %}"/>
 
-  <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+  <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
   <style>
-    .navbar {
-      margin: 10px 0 10px 0;
+    body {
+      min-height: 2000px;
+      padding-top: 70px;
     }
     .footer {
       height: 60px;
@@ -33,110 +34,116 @@
     }
     .responsive-container { position: relative; padding-bottom: 56.25%; padding-top: 30px; height: 0; overflow: hidden; }
     .responsive-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+    .media { border-bottom: 1px #F1F1F1 solid; padding-top:7px;}
+    .media-timestamp { color: #B3B3B3;}
   </style>
   {% block head %}
   {% endblock %}
 </head>
 <body>
-<div class="container">
-  <nav class="navbar navbar-default">
-    <div class="container-fluid">
+  <nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
       <div class="navbar-header">
         <a class="navbar-brand" href="/" style="padding-right:10px;">
           <img alt="Brand" src="{% static "img/logo.png" %}" width="20">
         </a>
         <a class="navbar-brand" href="/" style="padding-left:15px;">힛동</a>
+        <p class="navbar-text"><small>오늘의 히트 동영상!</small></p>
       </div>
     </div>
   </nav>
-  {% block body %}{% endblock %}
-</div>
-<footer class="footer">
-  <p class="text-muted">2015 &copy; Golden Brdg.</p>
-</footer>
-<script>
-  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-  ga('create', 'UA-63946446-1', 'auto');
-  ga('send', 'pageview');
-</script>
 
-<script src="http://xad.adlibr.com/script/web/smart/banner_ad.js"></script>
-<script>
-    var adlib_vars = {};
-    adlib_vars.key = "55785e5f0cf2d5747f1ce262";
-    adlib_vars.ad_align = "center";
-    adlib_vars.render    = "banner_adlibr"; // div id
-    adlib_vars.hreftop   = "";
+  <div class="container">
+    {% block body %}{% endblock %}
+  </div>
 
-    new ADLIBrBanner.init(adlib_vars);
-</script>
+  <footer class="footer">
+    <p class="text-muted">2015 &copy; Golden Gate Brdg.</p>
+  </footer>
 
-<script src="https://developers.kakao.com/sdk/js/kakao.min.js"></script>
-<script>
-  Kakao.init('{{ KAKAO_API_KEY }}');
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+    ga('create', 'UA-63946446-1', 'auto');
+    ga('send', 'pageview');
+  </script>
 
-  var video_host = 'http://hitdong.com/v/';
+  <script src="http://xad.adlibr.com/script/web/smart/banner_ad.js"></script>
+  <script>
+      var adlib_vars = {};
+      adlib_vars.key = "55785e5f0cf2d5747f1ce262";
+      adlib_vars.ad_align = "center";
+      adlib_vars.render    = "banner_adlibr"; // div id
+      adlib_vars.hreftop   = "";
 
-  $('.facebook-btn').click(function(e){
-      e.preventDefault();
+      new ADLIBrBanner.init(adlib_vars);
+  </script>
 
-      var video_id = $(this).data('video-id');
+  <script src="https://developers.kakao.com/sdk/js/kakao.min.js"></script>
+  <script>
+    Kakao.init('{{ KAKAO_API_KEY }}');
 
-      shareFacebook(video_id);
-  });
+    var video_host = 'http://hitdong.com/v/';
 
-  $('.kakao-link-btn').click(function(e){
-      e.preventDefault();
+    $('.facebook-btn').click(function(e){
+        e.preventDefault();
 
-      var video_id = $(this).data('video-id');
-      var msg = $(this).data('msg');
+        var video_id = $(this).data('video-id');
 
-      sendToKakaoTalk(video_id, msg);
-  });
-
-  $('.kakao-story-btn').click(function(e){
-      e.preventDefault();
-
-      var video_id = $(this).data('video-id');
-
-      sendToKakaoStory(video_id);
-  });
-
-  function shareFacebook(video_id) {
-    var fb_url = 'https://www.facebook.com/sharer/sharer.php?u=';
-    var mkt_params = '?utm_source=facebook&utm_medium=link&utm_campaign=share';
-
-    var url = video_host + video_id + mkt_params;
-    url = fb_url + encodeURIComponent(url);
-    window.open(url);
-  }
-
-  function sendToKakaoTalk(video_id, msg) {
-    var mkt_params = '?utm_source=kakao&utm_medium=link&utm_campaign=share';
-
-    var url = video_host + video_id + mkt_params;
-
-    Kakao.Link.sendTalkLink({
-      label: msg + '\n\nvia/ 힛동\n\n' + url,
-      installTalk: false,
-      fail: function() {
-        alert('카카오톡이 설치되어 있지 않습니다.');
-      }
+        shareFacebook(video_id);
     });
-  }
 
-  function sendToKakaoStory(video_id) {
-    var mkt_params = '?utm_source=kakaostory&utm_medium=link&utm_campaign=share';
+    $('.kakao-link-btn').click(function(e){
+        e.preventDefault();
 
-    var url = video_host + video_id + mkt_params;
+        var video_id = $(this).data('video-id');
+        var msg = $(this).data('msg');
 
-    Kakao.Story.share({
-      url: url
+        sendToKakaoTalk(video_id, msg);
     });
-  }
-</script>
+
+    $('.kakao-story-btn').click(function(e){
+        e.preventDefault();
+
+        var video_id = $(this).data('video-id');
+
+        sendToKakaoStory(video_id);
+    });
+
+    function shareFacebook(video_id) {
+      var fb_url = 'https://www.facebook.com/sharer/sharer.php?u=';
+      var mkt_params = '?utm_source=facebook&utm_medium=link&utm_campaign=share';
+
+      var url = video_host + video_id + mkt_params;
+      url = fb_url + encodeURIComponent(url);
+      window.open(url);
+    }
+
+    function sendToKakaoTalk(video_id, msg) {
+      var mkt_params = '?utm_source=kakao&utm_medium=link&utm_campaign=share';
+
+      var url = video_host + video_id + mkt_params;
+
+      Kakao.Link.sendTalkLink({
+        label: msg + '\n\nvia/ 힛동\n\n' + url,
+        installTalk: false,
+        fail: function() {
+          alert('카카오톡이 설치되어 있지 않습니다.');
+        }
+      });
+    }
+
+    function sendToKakaoStory(video_id) {
+      var mkt_params = '?utm_source=kakaostory&utm_medium=link&utm_campaign=share';
+
+      var url = video_host + video_id + mkt_params;
+
+      Kakao.Story.share({
+        url: url
+      });
+    }
+  </script>
 </body>
 </html>

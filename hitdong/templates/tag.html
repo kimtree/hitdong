@@ -1,17 +1,12 @@
 {% extends "layout.html" %}
 {% load staticfiles %}
 {% block body %}
-  <nav>
-    <ul class="pager">
-      <li class="previous"><a href="/"><span aria-hidden="true">&larr;</span> 목록으로</a></li>
-    </ul>
-  </nav>
-  <div class="page-header" style="margin-top:0px;">
+  <div class="page-header" style="margin:0;">
     <h3>#{{ tag.name }}</h3>
   </div>
   <div class="row">
     {% for video in videos %}
-      {% include "video_macro.html" with use_profile=0 %}
+      {% include "tmpl_video_list.html" %}
     {% endfor %}
   </div>
   <nav>

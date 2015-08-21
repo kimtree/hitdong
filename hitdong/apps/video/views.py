@@ -17,7 +17,7 @@ def main(request):
     # video_list = video_list.order_by('-date', '-metric', '-created_at')
     video_list = video_list.order_by('-created_at')
 
-    paginator = Paginator(video_list, 5)
+    paginator = Paginator(video_list, 10)
     total_count = paginator.count
 
     page = request.GET.get('page')
@@ -70,7 +70,7 @@ def tag(request, tag_id):
 
     video_list = Video.objects.filter(tags=tag_id, is_open=True)
 
-    paginator = Paginator(video_list, 5)
+    paginator = Paginator(video_list, 10)
 
     page = request.GET.get('page')
     try:

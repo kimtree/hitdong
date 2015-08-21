@@ -1,0 +1,28 @@
+{% load staticfiles %}
+{% load tz %}
+{% timezone None %}
+<div class="col-md-12">
+
+  <div class="media">
+    <div class="media-left">
+      <a href="/v/{{ video.id }}"><img class="media-object" src="{{ video.thumbnail }}" width="90" height="50"></a>
+    </div>
+    <div class="media-body">
+      <a href="/v/{{ video.id }}" style="color:#000;">
+        <h6 class="media-heading">
+          {% if video.title|length > 1 %}
+            {{ video.title }}
+          {% elif video.description|length > 1 %}
+            {{ video.description|truncatechars:32 }}
+          {% else %}
+            <small>제목이 없는 영상</small>
+          {% endif %}
+        </h6>
+      </a>
+      <p class="media-timestamp pull-right">
+        <small>{{ video.created_at|date:'Y-m-d H:i:s' }}</small>
+      </p>
+    </div>
+  </div>
+</div>
+{% endtimezone %}
