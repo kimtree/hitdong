@@ -77,7 +77,7 @@ class VideoCrawler(object):
     def __init__(self):
         self._videos = []
         now = datetime.datetime.now(dateutil.tz.tzlocal())
-        yesterday = datetime.datetime.now(dateutil.tz.tzlocal()) - datetime.timedelta(days=1)
+        yesterday = datetime.datetime.now(dateutil.tz.tzlocal()) - datetime.timedelta(days=15)
         yesterday = yesterday.replace(hour=0, minute=0, second=0, microsecond=0)
         today = now.replace(hour=0, minute=0, second=0, microsecond=0)
 
