@@ -19,6 +19,11 @@
           {% endif %}
         </h6>
       </a>
+      <p class="media-timestamp">
+        {% for tag in video.tags.all %}
+          <a href="/tag/{{ tag.id }}" style="text-decoration:none;"><span class="label label-danger">#{{ tag.name }}</span></a>
+        {% endfor %}
+      </p>
       <p class="media-timestamp pull-right">
         <small>{{ video.created_at|date:'Y-m-d H:i:s' }}</small>
       </p>
