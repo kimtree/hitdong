@@ -1,5 +1,11 @@
 {% extends "layout.html" %}
 {% load staticfiles %}
+
+{% block title %}{{ channel.name }} 채널{% endblock %}
+{% block og_title %}{{ channel.name }} 채널{% endblock %}
+{% block url %}http://hitdong.com/c/{{ channel.id }}{% endblock %}
+{% block description %}{{ channel.name }}{% endblock %}
+
 {% block body %}
   <div class="page-header" style="margin:0;">
     <h3>{{ channel.name }}</h3>

@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <title>힛동 :: 오늘의 히트 동영상!</title>
+  <title>힛동 :: {% block title %}오늘의 히트 동영상!{% endblock %}</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
@@ -10,7 +10,7 @@
   <link rel="shortcut icon" type="image/png" href="{% static "img/favicon.ico" %}"/>
   <link rel="apple-touch-icon-precomposed" sizes="144x144" href="{% static "img/logo.png" %}">
 
-  <meta name="og:title" content="{% block title %}힛동{% endblock %}"/>
+  <meta name="og:title" content="힛동 :: {% block og_title %}오늘의 히트 동영상!{% endblock %}"/>
   <meta name="og:url" content="{% block url %}http://hitdong.com{% endblock %}"/>
   <meta name="og:description" content="{% block description %}오늘의 히트 동영상!{% endblock %}">
   <meta name="og:image" content="{% block fb_thumbnail %}{% static "img/logo.png" %}{% endblock %}"/>
