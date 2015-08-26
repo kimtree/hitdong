@@ -210,7 +210,7 @@ class YoutubeVideoCrawler(VideoCrawler):
                               video_id,
                               item['snippet']['title'],
                               item['snippet']['description'],
-                              item['snippet']['thumbnails']['high']['url'],
+                              item['snippet']['thumbnails']['default']['url'],
                               created_at,
                               metric)
                     self._videos.append(v)
