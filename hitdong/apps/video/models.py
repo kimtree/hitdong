@@ -43,4 +43,4 @@ class Tag(models.Model):
 class VideoAdmin(admin.ModelAdmin):
     filter_horizontal = ['tags']
     ordering = ['-created_at']
-    list_display = ['id', 'created_at', 'title', 'get_tag_names']
+    list_display = ['id', 'created_at', 'title', 'get_tag_names', 'is_open']
