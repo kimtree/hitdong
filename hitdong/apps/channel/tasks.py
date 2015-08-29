@@ -29,6 +29,6 @@ def do_parse(type, origin_id):
 
 @task
 def crawl_pages():
-    channels = Channel.objects.all()
+    channels = Channel.objects.filter(is_open=True)
     for channel in channels:
         do_parse.delay(channel.type, channel.origin_id)

@@ -1,6 +1,10 @@
 # -*- coding: utf-8 -*-
 import time
 
+import requests
+
+from django.conf import settings
+from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.shortcuts import redirect, render
 from django.template import *
@@ -8,6 +12,7 @@ from django.http import HttpResponse
 
 from hitdong.apps.video.models import Video, Tag
 from hitdong.apps.video.tasks import crawl_videos
+from hitdong.apps.crawler import VideoCrawler
 
 
 def main(request):
@@ -82,4 +87,38 @@ def tag(request, tag_id):
 
     return render(request, 'tag.html',
                   {'videos': videos, 'tag': tag},
+                  context_instance=RequestContext(request))
+
+
+@login_required
+def manual_adder(request):
+    video_id = request.GET.get('video_id')
+
+    if video_id:
+        param = {
+            'key': settings.YOUTUBE_ACCESS_TOKEN
+        }
+        param['id'] = video_id
+
+        data = requests.get('https://www.googleapis.com/youtube/v3/videos?part=snippet',
+                            params=param).json()
+
+        item = data['items'][0]
+        v = Video(96,  # 힛동 큐레이션 채널로 고정
+                  item['id'],
+                  item['snippet']['title'],
+                  item['snippet']['description'],
+                  item['snippet']['thumbnails']['default']['url'],
+                  VideoCrawler.convert_tz(item['snippet']['publishedAt']),
+                  9999)
+        v.save()
+
+        tags = Tag.objects.all()
+        for tag in tags:
+            if tag.name.lower() in (v.title.lower() or v.description.lower()):
+                v.tags.add(tag)
+
+        return redirect('/admin/video/video/' + video_id)
+
+    return render(request, 'manual_adder.html',
                   context_instance=RequestContext(request))

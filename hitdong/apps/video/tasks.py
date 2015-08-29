@@ -51,6 +51,6 @@ def video_tagger(video):
 
 @task
 def crawl_videos():
-    channels = Channel.objects.all()
+    channels = Channel.objects.filter(is_open=True)
     for channel in channels:
         do_parse.delay(channel.type, channel.origin_id)

@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from django.db import models
 
 
@@ -11,7 +12,8 @@ class Channel(models.Model):
     type = models.IntegerField(choices=TYPES)
     name = models.CharField(max_length=100)
     profile_url = models.URLField(max_length=400)
-    origin_id = models.CharField(max_length=200)
+    origin_id = models.CharField(max_length=200, null=True, blank=True)
+    is_open = models.BooleanField(default=True, verbose_name=u'공개')
 
     def __unicode__(self):
         return self._get_type_name(self.type) + ' ' + self.name

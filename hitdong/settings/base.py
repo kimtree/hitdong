@@ -84,6 +84,8 @@ STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static'),
 )
 
+LOGIN_URL = '/admin/login'
+
 # SDK Keys
 KAKAO_API_KEY = '439be186d57f00290356da15542c8909'
 

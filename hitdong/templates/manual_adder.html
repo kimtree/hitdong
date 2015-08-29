@@ -1,0 +1,22 @@
+{% extends "layout.html" %}
+{% load staticfiles %}
+
+{% block body %}
+
+<form class="form-horizontal">
+  <div class="form-group">
+    <label for="inputVideoId" class="col-sm-2 control-label">Video ID</label>
+    <div class="col-sm-10">
+      <input type="text" class="form-control" id="inputVideoId" name="video_id">
+      <span id="helpBlock" class="help-block">https://www.youtube.com/watch?v=OiC9-7Cb590 위 주소에서 <strong>OiC9-7Cb590</strong> 부분</span>
+      동영상은 비공개로 등록됩니다.
+    </div>
+  </div>
+  <div class="form-group">
+    <div class="col-sm-offset-2 col-sm-10">
+      <button type="submit" class="btn btn-primary">실행</button>
+    </div>
+  </div>
+</form>
+
+{% endblock %}

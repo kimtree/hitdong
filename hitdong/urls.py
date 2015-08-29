@@ -18,33 +18,7 @@ def test(request):
     from hitdong.apps.crawler import FacebookVideoCrawler, YoutubeVideoCrawler
     from hitdong.apps.channel.models import Channel
     from hitdong.apps.video.models import Video, Tag
-
-    channels = Channel.objects.all()
-    for channel in channels:
-        if channel.type == 1:
-            crawler = YoutubeVideoCrawler(channel.origin_id, settings.YOUTUBE_ACCESS_TOKEN)
-            crawler.run()
-
-            for video in crawler.videos:
-                if video.id:
-                    result = Video.objects.filter(id=video.id).first()
-                    if not result:
-                        channel = Channel.objects.filter(origin_id=channel.origin_id).first()
-                        if channel:
-                            description = video.description
-                            if channel.id == 2:
-                                description = video.description.split('\n')[0]
-
-                            v = Video(channel=channel,
-                                      id=video.id,
-                                      title=video.title,
-                                      description=description,
-                                      thumbnail=video.thumbnail,
-                                      created_at=video.created_at,
-                                      metric=video.metric,
-                                      is_open=True)
-                            print v
-
+    pass
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
@@ -56,6 +30,7 @@ urlpatterns = [
     url(r'^crawler/channel', channel.crawler),
     url(r'^crawler/video$', video.crawler),
     url(r'^flush$', flush_cache),
+    url(r'^video/add$', video.manual_adder),
     url(r'^test$', test)
 ]
 
