@@ -45,7 +45,10 @@ def do_parse(type, origin_id):
 def video_tagger(video):
     tags = Tag.objects.all()
     for tag in tags:
-        if tag.name.lower() in (video.title.lower() or video.description.lower()):
+        if tag.name.lower() in video.title.lower():
+            video.tags.add(tag)
+            continue
+        if tag.name.lower() in video.description.lower():
             video.tags.add(tag)
 
 
