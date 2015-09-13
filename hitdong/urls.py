@@ -34,7 +34,7 @@ def robot(request):
     Allow: /v/
     Allow: /tag/
     '''
-    return HttpResponse(robot_text)
+    return HttpResponse(robot_text, content_type='text/plain')
 
 
 urlpatterns = [
