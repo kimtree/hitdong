@@ -5,6 +5,7 @@ from django.contrib import admin
 from django.core.cache import cache
 from django.shortcuts import redirect
 from django.views.decorators.cache import cache_page
+from django.http import HttpResponse
 from hitdong.apps.video import views as video
 from hitdong.apps.channel import views as channel
 
@@ -20,6 +21,22 @@ def test(request):
     from hitdong.apps.video.models import Video, Tag
     pass
 
+
+def robot(request):
+    robot_text = '''
+    User-agent: *
+    Disallow: /admin
+    Disallow: /flush
+    Disallow: /crawler
+    Disallow: /video
+    Allow: /p/
+    Allow: /c/
+    Allow: /v/
+    Allow: /tag/
+    '''
+    return HttpResponse(robot_text)
+
+
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
     url(r'^$', cache_page(60 * 60 * 24)(video.main)),
@@ -31,7 +48,8 @@ urlpatterns = [
     url(r'^crawler/video$', video.crawler),
     url(r'^flush$', flush_cache),
     url(r'^video/add$', video.manual_adder),
-    url(r'^test$', test)
+    url(r'^test$', test),
+    url(r'^robots.txt$', robot)
 ]
 
 urlpatterns += [url(r'^static/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.STATIC_ROOT})]
