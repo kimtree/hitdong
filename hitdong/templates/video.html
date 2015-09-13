@@ -7,6 +7,7 @@
 {% block description %}{{ video.description }}{% endblock %}
 {% block meta_thumbnail %}{{ video.thumbnail|safe }}{% endblock %}
 {% block fb_thumbnail %}{{ video.thumbnail|safe }}{% endblock %}
+{% block keywords %}{% for tag in video.tags.all %}{{ tag.name }}{% if not forloop.last %},{% endif %}{% endfor %}{% endblock %}
 
 {% block body %}
   <div id="fb-root"></div>
