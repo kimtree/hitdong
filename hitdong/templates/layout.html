@@ -6,14 +6,15 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
   <meta name="keywords" content="힛동,{% block keywords %}직캠,직캠러,걸그룹,아이돌{% endblock %}">
+  <meta name="description" content="{% block description %}걸그룹 아이돌의 직캠 영상을 한번에!{% endblock %}">
 
-  <link rel="image_src" href="{% block meta_thumbnail %}{% static "img/logo.png" %}{% endblock %}" />
+  <link rel="image_src" href="{% block thumbnail %}{% static "img/logo.png" %}{% endblock %}" />
   <link rel="shortcut icon" type="image/png" href="{% static "img/favicon.ico" %}"/>
   <link rel="apple-touch-icon-precomposed" sizes="144x144" href="{% static "img/logo.png" %}">
 
-  <meta name="og:title" content="힛동 :: {% block og_title %}걸그룹 아이돌의 직캠 영상을 한번에!{% endblock %}"/>
+  <meta name="og:title" content="힛동 :: {% block fb_title %}걸그룹 아이돌의 직캠 영상을 한번에!{% endblock %}"/>
   <meta name="og:url" content="{% block url %}http://hitdong.com{% endblock %}"/>
-  <meta name="og:description" content="{% block description %}걸그룹 아이돌의 직캠 영상을 한번에!{% endblock %}">
+  <meta name="og:description" content="{% block fb_description %}걸그룹 아이돌의 직캠 영상을 한번에!{% endblock %}">
   <meta name="og:image" content="{% block fb_thumbnail %}{% static "img/logo.png" %}{% endblock %}"/>
 
   <link rel="stylesheet" href="{% static "css/bootstrap.min.css" %}">

@@ -2,11 +2,16 @@
 {% load staticfiles %}
 
 {% block title %}{{ video.title }}{% endblock %}
-{% block og_title %}{{ video.title }}{% endblock %}
-{% block url %}http://hitdong.com/v/{{ video.video_id }}{% endblock %}
+{% block fb_title %}{{ video.title }}{% endblock %}
+
+{% block url %}http://hitdong.com/v/{{ video.id }}{% endblock %}
+
 {% block description %}{{ video.description }}{% endblock %}
-{% block meta_thumbnail %}{{ video.thumbnail|safe }}{% endblock %}
+{% block fb_description %}{{ video.description }}{% endblock %}
+
+{% block thumbnail %}{{ video.thumbnail|safe }}{% endblock %}
 {% block fb_thumbnail %}{{ video.thumbnail|safe }}{% endblock %}
+
 {% block keywords %}{% for tag in video.tags.all %}{{ tag.name }}{% if not forloop.last %},{% endif %}{% endfor %}{% endblock %}
 
 {% block body %}
