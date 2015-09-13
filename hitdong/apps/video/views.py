@@ -73,7 +73,7 @@ def tag(request, tag_id):
     except:
         return redirect('/')
 
-    video_list = Video.objects.filter(tags=tag_id, is_open=True)
+    video_list = Video.objects.filter(tags=tag_id, is_open=True).order_by('-created_at')
 
     paginator = Paginator(video_list, 10)
 
