@@ -34,7 +34,7 @@
     <div class="caption">
       <p>
         {% for tag in video.tags.all %}
-          <a href="/tag/{{ tag.id }}" style="text-decoration:none;"><span class="label label-danger">#{{ tag.name }}</span></a>
+          <a href="/tag/{{ tag.id }}" style="text-decoration:none;"><span class="label label-tag">#{{ tag.name }}</span></a>
         {% endfor %}
       </p>
       <p>{{ video.description|linebreaksbr }}</p>
